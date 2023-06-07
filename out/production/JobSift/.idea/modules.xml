@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/JobSift.iml" filepath="$PROJECT_DIR$/.idea/JobSift.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JobSift.UI/JobSift.UI.iml" filepath="$PROJECT_DIR$/JobSift.UI/JobSift.UI.iml" />
     </modules>
   </component>
 </project>
