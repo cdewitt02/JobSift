@@ -12,7 +12,26 @@ public class LogInPersonUI extends JFrame{
         setSize(400, 200);
         setLocationRelativeTo(null);
         setIconImage(new ImageIcon("C:\\Users\\charl\\Documents\\GitHub\\JobSift\\resources\\JobSift_logo.png").getImage());
+        ImageIcon icon = new ImageIcon("C:\\Users\\charl\\Documents\\GitHub\\JobSift\\resources\\JobSift_logoSmall.png"); // Replace with the path to your left image file
 
+        //Title
+
+        JPanel titlePanel = new JPanel(new BorderLayout()){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.setColor(new Color(238, 192, 68)); // Adjust the RGB values for different shades of gold
+                g.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
+        JLabel leftImageLabel = new JLabel(icon);
+        JLabel rightImageLabel = new JLabel(icon);
+        JLabel titleLabel = new JLabel("JobSift User Log-In");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        titleLabel.setHorizontalAlignment(JLabel.CENTER);
+        titlePanel.add(leftImageLabel, BorderLayout.WEST);
+        titlePanel.add(titleLabel, BorderLayout.CENTER);
+        titlePanel.add(rightImageLabel, BorderLayout.EAST);
 
         // Create the main panel and layout
         JPanel mainPanel = new JPanel() {
@@ -84,12 +103,14 @@ public class LogInPersonUI extends JFrame{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                dispose();
+                SignUpPersonUI signUpPersonUI = new SignUpPersonUI();
             }
         });
         loginPanel.add(loginButton);
         loginPanel.add(signupButton);
 
+        mainPanel.add(titlePanel, BorderLayout.NORTH);
 
         // Add the login panel to the main panel
         mainPanel.add(loginPanel, BorderLayout.CENTER);

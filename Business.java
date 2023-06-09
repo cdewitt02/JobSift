@@ -3,6 +3,8 @@ import java.util.Arrays;
 public class Business {
     private String name;
     private String email;
+
+    private String industry;
     private String jobTitle;
     private String jobDescription;
     private String[] requiredSkills;
@@ -11,15 +13,17 @@ public class Business {
     public Business(){
         this.name = null;
         this.email = null;
+        this.industry = null;
         this.jobTitle = null;
         this.jobDescription = null;
         this.requiredSkills = null;
         this.locations = null;
         this.expectedPay = -1;
     }
-    public Business(String name, String email, String jobTitle, String jobDescription, String[] requiredSkills, String[] preferredLocations, double salaryRange) {
+    public Business(String name, String email,String industry, String jobTitle, String jobDescription, String[] requiredSkills, String[] preferredLocations, double salaryRange) {
         this.name = name;
         this.email = email;
+        this.industry = industry;
         this.jobTitle = jobTitle;
         this.jobDescription = jobDescription;
         this.requiredSkills = requiredSkills;
@@ -42,6 +46,13 @@ public class Business {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getIndustry() {
+        return industry;
+    }
+    public void setIndustry(String industry) {
+        this.industry = industry;
     }
 
     public String getJobTitle() {

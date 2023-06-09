@@ -1,2 +1,163 @@
-public class SignUpBusinessUI {
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
+public class SignUpBusinessUI extends JFrame {
+    private JTextField nameField;
+    private JTextField emailField;
+    private JTextField industryField;
+    private JTextField jobTitleField;
+    private JTextArea jobDescriptionArea;
+
+    private JTextField requiredSkillsField;
+    private JTextField locationsField;
+    private JTextField salaryField;
+
+    public SignUpBusinessUI() {
+        // Set up the JFrame
+        setTitle("Business Registration");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(650, 450);
+        setLocationRelativeTo(null);
+        setIconImage(new ImageIcon("C:\\Users\\charl\\Documents\\GitHub\\JobSift\\resources\\JobSift_logo.png").getImage());
+
+        // Create the main panel and layout
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBackground(new Color(238, 192, 68));
+
+
+        //Title
+        ImageIcon icon = new ImageIcon("C:\\Users\\charl\\Documents\\GitHub\\JobSift\\resources\\JobSift_logoSmall.png"); // Replace with the path to your left image file
+
+        JPanel titlePanel = new JPanel(new BorderLayout()){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.setColor(new Color(238, 192, 68)); // Adjust the RGB values for different shades of gold
+                g.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
+        JLabel leftImageLabel = new JLabel(icon);
+        JLabel rightImageLabel = new JLabel(icon);
+        JLabel titleLabel = new JLabel("JobSift Business Registration");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        titleLabel.setHorizontalAlignment(JLabel.CENTER);
+        titlePanel.add(leftImageLabel, BorderLayout.WEST);
+        titlePanel.add(titleLabel, BorderLayout.CENTER);
+        titlePanel.add(rightImageLabel, BorderLayout.EAST);
+
+        //Create Input Panel
+        JPanel inputsPanel = new JPanel();
+        inputsPanel.setLayout(new GridLayout(16, 1, 10, 10));
+        inputsPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        inputsPanel.setBackground(new Color(238, 192, 68));
+
+        // Create the name label and field
+        JLabel nameLabel = new JLabel("Business Name:");
+        nameField = new JTextField();
+        nameLabel.setForeground(Color.BLACK);
+        inputsPanel.add(nameLabel);
+        inputsPanel.add(nameField);
+
+        // Create the email label and field
+        JLabel emailLabel = new JLabel("Contact Email:");
+        emailField = new JTextField();
+        emailLabel.setForeground(Color.BLACK);
+        inputsPanel.add(emailLabel);
+        inputsPanel.add(emailField);
+
+        //Create industry label and field
+        JLabel industryLabel = new JLabel("Industry:");
+        industryField = new JTextField();
+        emailLabel.setForeground(Color.BLACK);
+        inputsPanel.add(industryLabel);
+        inputsPanel.add(industryField);
+
+        //Create jobTitle label and field
+        JLabel jobTitleLabel = new JLabel("Job Title:");
+        jobTitleField = new JTextField();
+        emailLabel.setForeground(Color.BLACK);
+        inputsPanel.add(jobTitleLabel);
+        inputsPanel.add(jobTitleField);
+
+        //Create jobTitle label and field
+        JLabel jobDescriptionLabel = new JLabel("Job Description:");
+        jobDescriptionArea = new JTextArea();
+        jobDescriptionArea.setLineWrap(true);
+        jobDescriptionArea.setWrapStyleWord(true);
+        emailLabel.setForeground(Color.BLACK);
+        inputsPanel.add(jobDescriptionLabel);
+        inputsPanel.add(jobDescriptionArea);
+
+
+        // Create the skills label and field
+        JLabel skillsLabel = new JLabel("Required Skills: (FORMAT: Skill1, Skill2, ...)");
+        requiredSkillsField = new JTextField();
+        skillsLabel.setForeground(Color.BLACK);
+        inputsPanel.add(skillsLabel);
+        inputsPanel.add(requiredSkillsField);
+
+        // Create the locations label and field
+        JLabel locationsLabel = new JLabel("Preferred Locations: (Use format above)");
+        locationsField = new JTextField();
+        locationsLabel.setForeground(Color.BLACK);
+        inputsPanel.add(locationsLabel);
+        inputsPanel.add(locationsField);
+
+        // Create the salary label and field
+        JLabel salaryLabel = new JLabel("Salary:");
+        salaryField = new JTextField();
+        salaryLabel.setForeground(Color.BLACK);
+        inputsPanel.add(salaryLabel);
+        inputsPanel.add(salaryField);
+
+        // Create the submit button
+        JButton submitButton = new JButton("Register");
+        submitButton.setBackground(Color.BLACK);
+        submitButton.setForeground(Color.WHITE);
+        submitButton.setHorizontalAlignment(JButton.CENTER);
+        inputsPanel.add(submitButton);
+
+        // Add action listener to the submit button
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Handle submit button click event
+                // Retrieve and process the user's sign-up data
+                String name = nameField.getText();
+                String email = emailField.getText();
+                String industry = industryField.getText();
+                String jobTitle = jobTitleField.getText();
+                String jobDescription = jobDescriptionArea.getText();
+                String skills = requiredSkillsField.getText();
+                String locations = locationsField.getText();
+                String salary = salaryField.getText();
+
+                // Perform necessary actions with the sign-up data
+                System.out.println("Name: " + name);
+                System.out.println("Email: " + email);
+                System.out.println("Industry: " + industry);
+                System.out.println("Job Title: " + jobTitle);
+                System.out.println("Job Description: " + jobDescription);
+                System.out.println("Skills: " + skills);
+                System.out.println("Preferred Locations: " + locations);
+                System.out.println("Preferred Salary: " + salary);
+
+                // Display a confirmation message
+                JOptionPane.showMessageDialog(null, "Registration successful!");
+            }
+        });
+
+        mainPanel.add(titlePanel);
+        mainPanel.add(Box.createVerticalStrut(20));
+        mainPanel.add(inputsPanel);
+        // Add the main panel to the JFrame
+        add(mainPanel);
+
+        // Make the JFrame visible
+        setVisible(true);
+    }
 }
