@@ -12,5 +12,5 @@ Applicant:
 Business:
   A company seeking an employee
 
-JobSift.UI
+JobSift.UI:
   Contains all of the UI components, currently has the welcome page and sign up/log in pages for users and businesses
