@@ -119,4 +119,15 @@ public class WelcomePageUI extends JFrame {
         // Make the JFrame visible
         setVisible(true);
     }
+
+    public static void main (String[] args){
+//        Business cnh = new Business("CNH Industrial", "cnh@cnhind.com", "SWE Intern", "U softengineer it", new String[]{"Softy", "Engineering"}, new String[]{"Remote"}, 24 );
+//        Applicant charlie = new Applicant("Charlie DeWitt", "charliedewitt20@gmail.com", null, new String[]{"Handsome", "Smart", "Buff"}, new String[]{"Anywhere"}, 1000000);
+//        System.out.println(cnh);
+//        System.out.println(charlie);
+//        JSONCreator.createApplicantJsonFile("Charlie DeWitt", "charliedewitt20@gmail.com", null, new String[]{"Handsome", "Smart", "Buff"}, new String[]{"Anywhere"}, 1000000);
+
+        WelcomePageUI welcomePageUI = new WelcomePageUI();
+
+    }
 }

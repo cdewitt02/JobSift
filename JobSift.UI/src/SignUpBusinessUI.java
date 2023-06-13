@@ -8,12 +8,6 @@ public class SignUpBusinessUI extends JFrame {
     private JTextField nameField;
     private JTextField emailField;
     private JTextField industryField;
-    private JTextField jobTitleField;
-    private JTextArea jobDescriptionArea;
-
-    private JTextField requiredSkillsField;
-    private JTextField locationsField;
-    private JTextField salaryField;
 
     public SignUpBusinessUI() {
         // Set up the JFrame
@@ -76,43 +70,6 @@ public class SignUpBusinessUI extends JFrame {
         inputsPanel.add(industryLabel);
         inputsPanel.add(industryField);
 
-        //Create jobTitle label and field
-        JLabel jobTitleLabel = new JLabel("Job Title:");
-        jobTitleField = new JTextField();
-        emailLabel.setForeground(Color.BLACK);
-        inputsPanel.add(jobTitleLabel);
-        inputsPanel.add(jobTitleField);
-
-        //Create jobTitle label and field
-        JLabel jobDescriptionLabel = new JLabel("Job Description:");
-        jobDescriptionArea = new JTextArea();
-        jobDescriptionArea.setLineWrap(true);
-        jobDescriptionArea.setWrapStyleWord(true);
-        emailLabel.setForeground(Color.BLACK);
-        inputsPanel.add(jobDescriptionLabel);
-        inputsPanel.add(jobDescriptionArea);
-
-
-        // Create the skills label and field
-        JLabel skillsLabel = new JLabel("Required Skills: (FORMAT: Skill1, Skill2, ...)");
-        requiredSkillsField = new JTextField();
-        skillsLabel.setForeground(Color.BLACK);
-        inputsPanel.add(skillsLabel);
-        inputsPanel.add(requiredSkillsField);
-
-        // Create the locations label and field
-        JLabel locationsLabel = new JLabel("Preferred Locations: (Use format above)");
-        locationsField = new JTextField();
-        locationsLabel.setForeground(Color.BLACK);
-        inputsPanel.add(locationsLabel);
-        inputsPanel.add(locationsField);
-
-        // Create the salary label and field
-        JLabel salaryLabel = new JLabel("Salary:");
-        salaryField = new JTextField();
-        salaryLabel.setForeground(Color.BLACK);
-        inputsPanel.add(salaryLabel);
-        inputsPanel.add(salaryField);
 
         // Create the submit button
         JButton submitButton = new JButton("Register");
@@ -130,21 +87,13 @@ public class SignUpBusinessUI extends JFrame {
                 String name = nameField.getText();
                 String email = emailField.getText();
                 String industry = industryField.getText();
-                String jobTitle = jobTitleField.getText();
-                String jobDescription = jobDescriptionArea.getText();
-                String skills = requiredSkillsField.getText();
-                String locations = locationsField.getText();
-                String salary = salaryField.getText();
+
 
                 // Perform necessary actions with the sign-up data
                 System.out.println("Name: " + name);
                 System.out.println("Email: " + email);
                 System.out.println("Industry: " + industry);
-                System.out.println("Job Title: " + jobTitle);
-                System.out.println("Job Description: " + jobDescription);
-                System.out.println("Skills: " + skills);
-                System.out.println("Preferred Locations: " + locations);
-                System.out.println("Preferred Salary: " + salary);
+
 
                 // Display a confirmation message
                 JOptionPane.showMessageDialog(null, "Registration successful!");

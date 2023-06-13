@@ -12,6 +12,8 @@ public class SignUpPersonUI extends JFrame {
     private JTextField locationsField;
     private JTextField salaryField;
 
+    private File resume;
+
     public SignUpPersonUI() {
         // Set up the JFrame
         setTitle("User Sign-Up");
@@ -76,14 +78,14 @@ public class SignUpPersonUI extends JFrame {
         inputsPanel.add(resumeButton);
 
         // Create the skills label and field
-        JLabel skillsLabel = new JLabel("Skills:");
+        JLabel skillsLabel = new JLabel("Skills (Format: Skill1,Skill2 ... no spaces):");
         skillsField = new JTextField();
         skillsLabel.setForeground(Color.BLACK);
         inputsPanel.add(skillsLabel);
         inputsPanel.add(skillsField);
 
         // Create the locations label and field
-        JLabel locationsLabel = new JLabel("Preferred Locations:");
+        JLabel locationsLabel = new JLabel("Preferred Locations (Format as above):");
         locationsField = new JTextField();
         locationsLabel.setForeground(Color.BLACK);
         inputsPanel.add(locationsLabel);
@@ -113,6 +115,7 @@ public class SignUpPersonUI extends JFrame {
                 int result = fileChooser.showOpenDialog(SignUpPersonUI.this);
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
+                    resume = selectedFile;
                     // Process the selected resume file
                     System.out.println("Selected Resume: " + selectedFile.getAbsolutePath());
                 }
@@ -127,7 +130,10 @@ public class SignUpPersonUI extends JFrame {
                 String name = nameField.getText();
                 String email = emailField.getText();
                 String skills = skillsField.getText();
+                String[] skillsarr = skills.split(",");
                 String locations = locationsField.getText();
+                String[] locationsarr = locations.split(",");
+
                 String salary = salaryField.getText();
 
                 // Perform necessary actions with the sign-up data
@@ -136,6 +142,8 @@ public class SignUpPersonUI extends JFrame {
                 System.out.println("Skills: " + skills);
                 System.out.println("Preferred Locations: " + locations);
                 System.out.println("Preferred Salary: " + salary);
+
+                JSONCreator.createApplicantJsonFile(name, email, resume, skillsarr, locationsarr, Double.valueOf(salary));
 
                 // Display a confirmation message
                 JOptionPane.showMessageDialog(null, "Sign up successful!");
