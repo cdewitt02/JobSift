@@ -14,7 +14,7 @@ public class SignUpPersonUI extends JFrame {
 
     private File resume;
 
-    public SignUpPersonUI() {
+    public SignUpPersonUI(MongoDBConnection connection) {
         // Set up the JFrame
         setTitle("User Sign-Up");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -143,7 +143,8 @@ public class SignUpPersonUI extends JFrame {
                 System.out.println("Preferred Locations: " + locations);
                 System.out.println("Preferred Salary: " + salary);
 
-                JSONCreator.createApplicantJsonFile(name, email, resume, skillsarr, locationsarr, Double.valueOf(salary));
+                //Call document creator
+                connection.registerApplicant(name, email, skillsarr, locationsarr, Double.valueOf(salary), resume);
 
                 // Display a confirmation message
                 JOptionPane.showMessageDialog(null, "Sign up successful!");

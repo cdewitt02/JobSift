@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LogInPersonUI extends JFrame{
-    public LogInPersonUI(){
+    public LogInPersonUI(MongoDBConnection connection){
         // Set up the JFrame
         setTitle("User Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -104,7 +104,7 @@ public class LogInPersonUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-                SignUpPersonUI signUpPersonUI = new SignUpPersonUI();
+                SignUpPersonUI signUpPersonUI = new SignUpPersonUI(connection);
             }
         });
         loginPanel.add(loginButton);

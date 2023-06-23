@@ -9,7 +9,7 @@ public class SignUpBusinessUI extends JFrame {
     private JTextField emailField;
     private JTextField industryField;
 
-    public SignUpBusinessUI() {
+    public SignUpBusinessUI(MongoDBConnection connection) {
         // Set up the JFrame
         setTitle("Business Registration");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,7 +66,7 @@ public class SignUpBusinessUI extends JFrame {
         //Create industry label and field
         JLabel industryLabel = new JLabel("Industry:");
         industryField = new JTextField();
-        emailLabel.setForeground(Color.BLACK);
+        industryLabel.setForeground(Color.BLACK);
         inputsPanel.add(industryLabel);
         inputsPanel.add(industryField);
 
@@ -94,6 +94,8 @@ public class SignUpBusinessUI extends JFrame {
                 System.out.println("Email: " + email);
                 System.out.println("Industry: " + industry);
 
+                //Call document creator
+                connection.registerBusiness(name, email, industry);
 
                 // Display a confirmation message
                 JOptionPane.showMessageDialog(null, "Registration successful!");

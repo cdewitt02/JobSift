@@ -1,3 +1,4 @@
+import javax.print.Doc;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
@@ -9,7 +10,7 @@ public class WelcomePageUI extends JFrame {
     private JButton jobSeekerButton;
     private JButton businessButton;
 
-    public WelcomePageUI() {
+    public WelcomePageUI(MongoDBConnection connection) {
         // Set up the JFrame
         setTitle("Welcome to Job Portal");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -83,7 +84,7 @@ public class WelcomePageUI extends JFrame {
                 // Perform the necessary actions when the user indicates they are seeking a job
                 // For example, navigate to the job seeker section of your application
                 dispose();
-                LogInPersonUI logInPersonUI = new LogInPersonUI();
+                LogInPersonUI logInPersonUI = new LogInPersonUI(connection);
             }
         });
 
@@ -102,7 +103,7 @@ public class WelcomePageUI extends JFrame {
                 // Perform the necessary actions when the user indicates they are looking to fill a role
                 // For example, navigate to the business section of your application
                 dispose();
-                LogInBusinessUI logInBusinessUI = new LogInBusinessUI();
+                LogInBusinessUI logInBusinessUI = new LogInBusinessUI(connection);
             }
         });
 
@@ -127,7 +128,10 @@ public class WelcomePageUI extends JFrame {
 //        System.out.println(charlie);
 //        JSONCreator.createApplicantJsonFile("Charlie DeWitt", "charliedewitt20@gmail.com", null, new String[]{"Handsome", "Smart", "Buff"}, new String[]{"Anywhere"}, 1000000);
 
-        WelcomePageUI welcomePageUI = new WelcomePageUI();
+        MongoDBConnection connection = new MongoDBConnection("mongodb://localhost:27017", "JobSiftDB");
+//        DocumentCreator documentCreator = new DocumentCreator();
+        WelcomePageUI welcomePageUI = new WelcomePageUI(connection);
+
 
     }
 }
