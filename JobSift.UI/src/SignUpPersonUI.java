@@ -125,8 +125,9 @@ public class SignUpPersonUI extends JFrame {
         submitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+
                 // Handle submit button click event
-                // Retrieve and process the user's sign-up data
                 String name = nameField.getText();
                 String email = emailField.getText();
                 String skills = skillsField.getText();
@@ -148,6 +149,9 @@ public class SignUpPersonUI extends JFrame {
 
                 // Display a confirmation message
                 JOptionPane.showMessageDialog(null, "Sign up successful!");
+
+                dispose();
+                MainPersonUI mainPersonUI = new MainPersonUI(name, connection);
             }
         });
 
