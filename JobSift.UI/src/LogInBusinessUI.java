@@ -1,8 +1,14 @@
+import com.mongodb.client.MongoCursor;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import static com.mongodb.client.model.Filters.eq;
 
 public class LogInBusinessUI extends JFrame{
     public LogInBusinessUI(MongoDBConnection connection){
@@ -77,21 +83,34 @@ public class LogInBusinessUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Perform the necessary actions for login
-                String username = usernameField.getText();
+                String name = usernameField.getText();
                 String password = passwordField.getText();
+                String passwordenc = null;
                 // Check the credentials and perform login logic
-                // For example, validate username and password against a database
+                try {
+                    Document doc = connection.businesses.find(new Document("name", name)).first();
 
-                // Display a message based on the login result
-                if (username.equals("admin") && String.valueOf(password).equals("password")) {
-                    JOptionPane.showMessageDialog(null, "Login successful!");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Invalid username or password. Please try again.");
+                    // Execute the query and get the cursor
+                    MongoCursor<Document> cursor = connection.businesses.find(doc).iterator();
+                    // Iterate over the results
+                    while (cursor.hasNext()) {
+                        Document business = cursor.next();
+                        // Read the desired fields from the business document
+                        passwordenc = business.getString("password");
+                        // ... read other fields as needed
+                    }
+
+                    cursor.close();
+
+                    if (PasswordEncryption.checkPassword(password, passwordenc)) {
+                        dispose();
+                        MainBusinessUI mainBusinessUI = new MainBusinessUI(name, connection);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Password incorrect");
+                    }
+                }catch (Exception g){
+                    JOptionPane.showMessageDialog(null, "Business not registered");
                 }
-
-                // Clear the fields after login attempt
-                usernameField.setText("");
-                passwordField.setText("");
             }
         });
 
@@ -100,7 +119,6 @@ public class LogInBusinessUI extends JFrame{
         signupButton.setForeground(Color.BLACK);
         signupButton.setBorder(new LineBorder(Color.BLACK, 2));
         signupButton.addActionListener(new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();

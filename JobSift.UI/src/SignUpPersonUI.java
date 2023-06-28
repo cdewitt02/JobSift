@@ -6,6 +6,8 @@ import java.io.File;
 
 public class SignUpPersonUI extends JFrame {
     private JTextField nameField;
+
+    private JTextField passwordField;
     private JTextField emailField;
     private JButton resumeButton;
     private JTextField skillsField;
@@ -50,7 +52,7 @@ public class SignUpPersonUI extends JFrame {
 
         //Create Input Panel
         JPanel inputsPanel = new JPanel();
-        inputsPanel.setLayout(new GridLayout(8, 2, 10, 10));
+        inputsPanel.setLayout(new GridLayout(16, 2, 10, 10));
         inputsPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         inputsPanel.setBackground(new Color(238, 192, 68));
 
@@ -60,6 +62,21 @@ public class SignUpPersonUI extends JFrame {
         nameLabel.setForeground(Color.BLACK);
         inputsPanel.add(nameLabel);
         inputsPanel.add(nameField);
+
+        // Create the name label and field
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordField = new JPasswordField();
+        passwordLabel.setForeground(Color.BLACK);
+        inputsPanel.add(passwordLabel);
+        inputsPanel.add(passwordField);
+
+        // Create the name label and field
+        JLabel passwordcLabel = new JLabel("Confirm Password:");
+        JTextField passwordcField = new JPasswordField();
+        passwordcLabel.setForeground(Color.BLACK);
+        inputsPanel.add(passwordcLabel);
+        inputsPanel.add(passwordcField);
+
 
         // Create the email label and field
         JLabel emailLabel = new JLabel("Email:");
@@ -129,29 +146,27 @@ public class SignUpPersonUI extends JFrame {
 
                 // Handle submit button click event
                 String name = nameField.getText();
+                String password = passwordField.getText();
+                String passwordc = passwordcField.getText();
                 String email = emailField.getText();
                 String skills = skillsField.getText();
                 String[] skillsarr = skills.split(",");
                 String locations = locationsField.getText();
                 String[] locationsarr = locations.split(",");
-
                 String salary = salaryField.getText();
 
-                // Perform necessary actions with the sign-up data
-                System.out.println("Name: " + name);
-                System.out.println("Email: " + email);
-                System.out.println("Skills: " + skills);
-                System.out.println("Preferred Locations: " + locations);
-                System.out.println("Preferred Salary: " + salary);
+                if(passwordc.equals(password) && !password.isEmpty()) {
+                    //Call document creator
+                    connection.registerApplicant(name, password, email, skillsarr, locationsarr, Double.valueOf(salary), resume);
 
-                //Call document creator
-                connection.registerApplicant(name, email, skillsarr, locationsarr, Double.valueOf(salary), resume);
+                    // Display a confirmation message
+                    JOptionPane.showMessageDialog(null, "Sign up successful!");
 
-                // Display a confirmation message
-                JOptionPane.showMessageDialog(null, "Sign up successful!");
-
-                dispose();
-                MainPersonUI mainPersonUI = new MainPersonUI(name, connection);
+                    dispose();
+                    MainPersonUI mainPersonUI = new MainPersonUI(name, connection);
+                }else{
+                    JOptionPane.showMessageDialog(null, "Passwords don't match or are empty");
+                }
             }
         });
 

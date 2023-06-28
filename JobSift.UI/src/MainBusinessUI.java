@@ -1,3 +1,8 @@
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Updates;
+import org.bson.Document;
+import org.bson.conversions.Bson;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
@@ -5,7 +10,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static com.mongodb.client.model.Filters.eq;
+
 public class MainBusinessUI extends JFrame {
+    private String email;
+    private String industry = null;
+
     public MainBusinessUI(String name, MongoDBConnection connection) {
         setTitle("Main Business UI");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -137,10 +147,63 @@ public class MainBusinessUI extends JFrame {
 //        JPanel viewJobsCard = getViewJobsCard();
 //        JPanel viewBusinessCard = getViewBusinessCard();
 
+        //Create viewBusinessCard
+
+        JPanel viewBusinessCard = new JPanel();
+        viewBusinessCard.setLayout(new GridLayout(8, 2, 10, 10));
+        viewBusinessCard.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        viewBusinessCard.setBackground(new Color(238, 192, 68));
+
+
+        JLabel nameLabel = new JLabel("Business Name:");
+        JTextField nameField = new JTextField(name);
+        viewBusinessCard.add(nameLabel);
+        viewBusinessCard.add(nameField);
+
+        JLabel emailLabel = new JLabel("Contact E-mail:");
+        Document doc = connection.businesses.find(new Document("name", name)).first();
+
+        // Execute the query and get the cursor
+        MongoCursor<Document> cursor = connection.businesses.find(doc).iterator();
+        // Iterate over the results
+        while (cursor.hasNext()) {
+            Document business = cursor.next();
+            // Read the desired fields from the business document
+            email = business.getString("email");
+            industry = business.getString("industry");
+            // ... read other fields as needed
+        }
+
+        // Close the cursor
+
+        cursor.close();
+        JTextField emailField = new JTextField(email);
+
+        JLabel industryLabel = new JLabel("Industry:");
+        JTextField industryField = new JTextField(industry);
+
+        viewBusinessCard.add(emailLabel);
+        viewBusinessCard.add(emailField);
+        viewBusinessCard.add(industryLabel);
+        viewBusinessCard.add(industryField);
+
+        JButton submitButton2 = new JButton("Submit Changes");
+        submitButton2.setBackground(Color.BLACK);
+        submitButton2.setForeground(Color.WHITE);
+        submitButton2.setHorizontalAlignment(JButton.CENTER);
+        viewBusinessCard.add(submitButton2);
+
+        JButton backButton2 = new JButton("Back to Main Menu");
+        backButton2.setBackground(Color.BLACK);
+        backButton2.setForeground(Color.WHITE);
+        backButton2.setHorizontalAlignment(JButton.CENTER);
+        viewBusinessCard.add(backButton2);
+
+
         cards.add(buttonPanel, "buttons");
         cards.add(createCard, "create");
 //        cards.add(viewJobsCard, "viewJobs");
-//        cards.add(viewBusinessCard, "viewBusiness");
+        cards.add(viewBusinessCard, "viewBusiness");
 
         //Button Listeners
         createJobButton.addActionListener(new ActionListener() {
@@ -159,7 +222,8 @@ public class MainBusinessUI extends JFrame {
                 // Handle job seeker button click event
                 // Perform the necessary actions when the user indicates they are seeking a job
                 // For example, navigate to the job seeker section of your application
-
+                CardLayout cl = (CardLayout) (cards.getLayout());
+                cl.show(cards, "viewJobs");
             }
         });
         viewBusinessButton.addActionListener(new ActionListener() {
@@ -168,7 +232,8 @@ public class MainBusinessUI extends JFrame {
                 // Handle job seeker button click event
                 // Perform the necessary actions when the user indicates they are seeking a job
                 // For example, navigate to the job seeker section of your application
-
+                CardLayout cl = (CardLayout) (cards.getLayout());
+                cl.show(cards, "viewBusiness");
             }
         });
         backButton.addActionListener(new ActionListener() {
@@ -178,6 +243,30 @@ public class MainBusinessUI extends JFrame {
                 // Perform the necessary actions when the user indicates they are seeking a job
                 // For example, navigate to the job seeker section of your application
                 cardLayout.previous(cards);
+            }
+        });
+        backButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Handle job seeker button click event
+                // Perform the necessary actions when the user indicates they are seeking a job
+                // For example, navigate to the job seeker section of your application
+                cardLayout.show(cards, "buttons");
+            }
+        });
+        submitButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Handle job seeker button click event
+                // Perform the necessary actions when the user indicates they are seeking a job
+                // For example, navigate to the job seeker section of your application
+                Bson filter = eq("name", name);
+                Bson update = Updates.combine(
+                        Updates.set("name", nameField.getText()),
+                        Updates.set("email", emailField.getText()),
+                        Updates.set("industry", industryField.getText())
+                );
+                connection.businesses.updateOne(filter, update);
             }
         });
 
@@ -201,17 +290,5 @@ public class MainBusinessUI extends JFrame {
         setContentPane(mainPanel);
 
         setVisible(true);
-    }
-
-    public static void main(String[] args) {
-        // Create an instance of the MainPersonUI class
-        MongoDBConnection connection = new MongoDBConnection("mongodb://localhost:27017", "JobSiftDB");
-
-        MainBusinessUI mainPersonUI = new MainBusinessUI("Charlie", connection);
-
-        // Add some sample jobs
-
-
-
     }
 }

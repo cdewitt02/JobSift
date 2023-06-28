@@ -11,10 +11,10 @@ import java.util.List;
 
 public class MongoDBConnection {
 
-    private MongoClient mongoClient;
-    private MongoDatabase database;
-    private MongoCollection<Document> businesses;
-    private MongoCollection<Document> applicants;
+    public MongoClient mongoClient;
+    public MongoDatabase database;
+    public MongoCollection<Document> businesses;
+    public MongoCollection<Document> applicants;
 
     public MongoDBConnection(String connectionString, String databaseName) {
         // Create a MongoDB client
@@ -28,24 +28,30 @@ public class MongoDBConnection {
         businesses = database.getCollection("businesses");
         applicants = database.getCollection("applicants");
     }
-    public void registerBusiness(String name, String address, String email) {
+    public void registerBusiness(String name, String email, String industry, String password) {
+
+        password = PasswordEncryption.encryptPassword(password);
         // Create a new business document
         Document business = new Document("name", name)
-                .append("address", address)
-                .append("email", email);
+                .append("email", email)
+                .append("industry", industry)
+                .append("password", password);
 
         // Insert the document into the collection
         businesses.insertOne(business);
 
         System.out.println("Business registered successfully.");
     }
-    public void registerApplicant(String name, String email, String[] skills, String[] locations, Double salary, File resume) {
+    public void registerApplicant(String name, String password, String email, String[] skills, String[] locations, Double salary, File resume) {
 
         List<String> skills_list = Arrays.asList(skills);
         List<String> locations_list = Arrays.asList(locations);
 
+        password = PasswordEncryption.encryptPassword(password);
+
         // Create a new business document
         Document applicant = new Document("name", name)
+                .append("password", password)
                 .append("email", email)
                 .append("skills", skills_list)
                 .append("locations", locations_list)

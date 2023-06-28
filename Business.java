@@ -3,7 +3,6 @@ import java.util.Arrays;
 public class Business {
     private String name;
     private String email;
-
     private String industry;
 
     public Business(){

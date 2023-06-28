@@ -7,13 +7,15 @@ import java.io.File;
 public class SignUpBusinessUI extends JFrame {
     private JTextField nameField;
     private JTextField emailField;
+    private JTextField passwordField;
+    private JTextField passwordcField;
     private JTextField industryField;
 
     public SignUpBusinessUI(MongoDBConnection connection) {
         // Set up the JFrame
         setTitle("Business Registration");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(650, 450);
+        setSize(650, 550);
         setLocationRelativeTo(null);
         setIconImage(new ImageIcon("C:\\Users\\charl\\Documents\\GitHub\\JobSift\\resources\\JobSift_logo.png").getImage());
 
@@ -70,6 +72,19 @@ public class SignUpBusinessUI extends JFrame {
         inputsPanel.add(industryLabel);
         inputsPanel.add(industryField);
 
+        //Create password labels and fields
+        JLabel passwordLabel = new JLabel("Password:");
+        passwordField = new JPasswordField();
+        passwordLabel.setForeground(Color.BLACK);
+        inputsPanel.add(passwordLabel);
+        inputsPanel.add(passwordField);
+
+        //Create password labels and fields
+        JLabel passwordcLabel = new JLabel("Confirm Password:");
+        passwordcField = new JPasswordField();
+        passwordcLabel.setForeground(Color.BLACK);
+        inputsPanel.add(passwordcLabel);
+        inputsPanel.add(passwordcField);
 
         // Create the submit button
         JButton submitButton = new JButton("Register");
@@ -83,22 +98,21 @@ public class SignUpBusinessUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Handle submit button click event
-                // Retrieve and process the user's sign-up data
+                // Retrieve and process the user's sign-up
                 String name = nameField.getText();
                 String email = emailField.getText();
                 String industry = industryField.getText();
+                String password = passwordField.getText();
+                String passwordc = passwordcField.getText();
+                if(passwordc.equals(password) && !password.isEmpty()) {
+                    //Call document creator
+                    connection.registerBusiness(name, email, industry, password);
 
-
-                // Perform necessary actions with the sign-up data
-                System.out.println("Name: " + name);
-                System.out.println("Email: " + email);
-                System.out.println("Industry: " + industry);
-
-                //Call document creator
-                connection.registerBusiness(name, email, industry);
-
-                // Display a confirmation message
-                JOptionPane.showMessageDialog(null, "Registration successful!");
+                    dispose();
+                    MainBusinessUI mainBusinessUI = new MainBusinessUI(name, connection);
+                }else{
+                    JOptionPane.showMessageDialog(null, "Passwords Don't Match or is empty");
+                }
             }
         });
 

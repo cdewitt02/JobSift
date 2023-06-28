@@ -122,14 +122,7 @@ public class WelcomePageUI extends JFrame {
     }
 
     public static void main (String[] args){
-//        Business cnh = new Business("CNH Industrial", "cnh@cnhind.com", "SWE Intern", "U softengineer it", new String[]{"Softy", "Engineering"}, new String[]{"Remote"}, 24 );
-//        Applicant charlie = new Applicant("Charlie DeWitt", "charliedewitt20@gmail.com", null, new String[]{"Handsome", "Smart", "Buff"}, new String[]{"Anywhere"}, 1000000);
-//        System.out.println(cnh);
-//        System.out.println(charlie);
-//        JSONCreator.createApplicantJsonFile("Charlie DeWitt", "charliedewitt20@gmail.com", null, new String[]{"Handsome", "Smart", "Buff"}, new String[]{"Anywhere"}, 1000000);
-
         MongoDBConnection connection = new MongoDBConnection("mongodb://localhost:27017", "JobSiftDB");
-//        DocumentCreator documentCreator = new DocumentCreator();
         WelcomePageUI welcomePageUI = new WelcomePageUI(connection);
 
 
