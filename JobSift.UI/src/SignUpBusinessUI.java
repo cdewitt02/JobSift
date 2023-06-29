@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.File;
 
 public class SignUpBusinessUI extends JFrame {
@@ -89,7 +91,7 @@ public class SignUpBusinessUI extends JFrame {
         // Create the submit button
         JButton submitButton = new JButton("Register");
         submitButton.setBackground(Color.BLACK);
-        submitButton.setForeground(Color.WHITE);
+        submitButton.setForeground(new Color(238, 192, 68));
         submitButton.setHorizontalAlignment(JButton.CENTER);
         inputsPanel.add(submitButton);
 
@@ -115,6 +117,20 @@ public class SignUpBusinessUI extends JFrame {
                 }
             }
         });
+        submitButton.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                submitButton.setBackground(new Color(238, 192, 68));
+                submitButton.setForeground(Color.BLACK);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                submitButton.setBackground(Color.BLACK);
+                submitButton.setForeground(new Color(238, 192, 68));
+            }
+        });
+
 
         mainPanel.add(titlePanel);
         mainPanel.add(Box.createVerticalStrut(20));

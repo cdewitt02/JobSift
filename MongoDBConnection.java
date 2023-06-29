@@ -15,7 +15,7 @@ public class MongoDBConnection {
     public MongoDatabase database;
     public MongoCollection<Document> businesses;
     public MongoCollection<Document> applicants;
-
+    public MongoCollection<Document> jobs;
     public MongoDBConnection(String connectionString, String databaseName) {
         // Create a MongoDB client
         MongoClientURI uri = new MongoClientURI(connectionString);
@@ -27,6 +27,7 @@ public class MongoDBConnection {
         //Get Collections
         businesses = database.getCollection("businesses");
         applicants = database.getCollection("applicants");
+        jobs = database.getCollection("jobs");
     }
     public void registerBusiness(String name, String email, String industry, String password) {
 
@@ -63,6 +64,18 @@ public class MongoDBConnection {
         applicants.insertOne(applicant);
 
         System.out.println("Applicant registered successfully.");
+    }
+    public void registerJob(String company, String jobTitle, String jobDescription, String[] requiredSkills, String[] preferredLocations, double salary) {
+        List<String> skills_list = Arrays.asList(requiredSkills);
+        List<String> locations_list = Arrays.asList(preferredLocations);
+
+        Document job = new Document("company", company)
+                .append("jobTitle", jobTitle)
+                .append("jobDescription", jobDescription)
+                .append("requiredSkills", skills_list)
+                .append("locations", locations_list)
+                .append("pay", salary);
+        jobs.insertOne(job);
     }
     public MongoDatabase getDatabase() {
         return database;

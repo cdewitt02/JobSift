@@ -7,6 +7,8 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -113,6 +115,19 @@ public class LogInBusinessUI extends JFrame{
                 }
             }
         });
+        loginButton.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                loginButton.setBackground(Color.BLACK);
+                loginButton.setForeground(new Color(238, 192, 68));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                loginButton.setBackground(new Color(238, 192, 68));
+                loginButton.setForeground(Color.BLACK);
+            }
+        });
 
         JButton signupButton = new JButton("Register Business");
         signupButton.setBackground(new Color(238, 192, 68));
@@ -125,6 +140,20 @@ public class LogInBusinessUI extends JFrame{
                 SignUpBusinessUI signUpBusinessUI = new SignUpBusinessUI(connection);
             }
         });
+        signupButton.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                signupButton.setBackground(Color.BLACK);
+                signupButton.setForeground(new Color(238, 192, 68));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                signupButton.setBackground(new Color(238, 192, 68));
+                signupButton.setForeground(Color.BLACK);
+            }
+        });
+
         loginPanel.add(loginButton);
         loginPanel.add(signupButton);
 

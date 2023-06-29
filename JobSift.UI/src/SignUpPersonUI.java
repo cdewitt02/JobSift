@@ -2,6 +2,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.File;
 
 public class SignUpPersonUI extends JFrame {
@@ -90,7 +92,7 @@ public class SignUpPersonUI extends JFrame {
         resumeButton = new JButton("Upload Resume");
         resumeLabel.setForeground(Color.BLACK);
         resumeButton.setBackground(Color.BLACK);
-        resumeButton.setForeground(Color.WHITE);
+        resumeButton.setForeground(new Color(238, 192, 68));
         inputsPanel.add(resumeLabel);
         inputsPanel.add(resumeButton);
 
@@ -118,7 +120,7 @@ public class SignUpPersonUI extends JFrame {
         // Create the submit button
         JButton submitButton = new JButton("Register");
         submitButton.setBackground(Color.BLACK);
-        submitButton.setForeground(Color.WHITE);
+        submitButton.setForeground(new Color(238, 192, 68));
         submitButton.setHorizontalAlignment(JButton.CENTER);
         inputsPanel.add(submitButton);
 
@@ -167,6 +169,33 @@ public class SignUpPersonUI extends JFrame {
                 }else{
                     JOptionPane.showMessageDialog(null, "Passwords don't match or are empty");
                 }
+            }
+        });
+        submitButton.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                submitButton.setBackground(new Color(238, 192, 68));
+                submitButton.setForeground(Color.BLACK);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                submitButton.setBackground(Color.BLACK);
+                submitButton.setForeground(new Color(238, 192, 68));
+            }
+        });
+
+        resumeButton.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                resumeButton.setBackground(new Color(238, 192, 68));
+                resumeButton.setForeground(Color.BLACK);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                resumeButton.setBackground(Color.BLACK);
+                resumeButton.setForeground(new Color(238, 192, 68));
             }
         });
 

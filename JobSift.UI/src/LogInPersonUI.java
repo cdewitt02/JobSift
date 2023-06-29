@@ -6,6 +6,8 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 public class LogInPersonUI extends JFrame{
     public LogInPersonUI(MongoDBConnection connection){
@@ -93,7 +95,7 @@ public class LogInPersonUI extends JFrame{
                         Document business = cursor.next();
                         passwordenc = business.getString("password");
                     }
-                    
+
                     cursor.close();
 
                     if (PasswordEncryption.checkPassword(password, passwordenc)) {
@@ -107,6 +109,19 @@ public class LogInPersonUI extends JFrame{
                 }
             }
         });
+        loginButton.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                loginButton.setBackground(Color.BLACK);
+                loginButton.setForeground(new Color(238, 192, 68));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                loginButton.setBackground(new Color(238, 192, 68));
+                loginButton.setForeground(Color.BLACK);
+            }
+        });
 
         JButton signupButton = new JButton("Sign-Up");
         signupButton.setBackground(new Color(238, 192, 68));
@@ -118,6 +133,19 @@ public class LogInPersonUI extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 dispose();
                 SignUpPersonUI signUpPersonUI = new SignUpPersonUI(connection);
+            }
+        });
+        signupButton.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                signupButton.setBackground(Color.BLACK);
+                signupButton.setForeground(new Color(238, 192, 68));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                signupButton.setBackground(new Color(238, 192, 68));
+                signupButton.setForeground(Color.BLACK);
             }
         });
         loginPanel.add(loginButton);

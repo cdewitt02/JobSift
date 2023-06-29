@@ -9,6 +9,8 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -134,14 +136,14 @@ public class MainBusinessUI extends JFrame {
         // Create the submit button
         JButton submitButton = new JButton("Post Job");
         submitButton.setBackground(Color.BLACK);
-        submitButton.setForeground(Color.WHITE);
+        submitButton.setForeground(new Color(238, 192, 68));
         submitButton.setHorizontalAlignment(JButton.CENTER);
         createCard.add(submitButton);
 
         // Create the back button
         JButton backButton = new JButton("Back to Main Menu");
         backButton.setBackground(Color.BLACK);
-        backButton.setForeground(Color.WHITE);
+        backButton.setForeground(new Color(238, 192, 68));
         backButton.setHorizontalAlignment(JButton.CENTER);
         createCard.add(backButton);
 //        JPanel viewJobsCard = getViewJobsCard();
@@ -199,6 +201,9 @@ public class MainBusinessUI extends JFrame {
         backButton2.setHorizontalAlignment(JButton.CENTER);
         viewBusinessCard.add(backButton2);
 
+        //Create viewJobs card
+
+        
 
         cards.add(buttonPanel, "buttons");
         cards.add(createCard, "create");
@@ -216,6 +221,19 @@ public class MainBusinessUI extends JFrame {
                 cl.show(cards, "create");
             }
         });
+        createJobButton.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                createJobButton.setBackground(Color.BLACK);
+                createJobButton.setForeground(new Color(238, 192, 68));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                createJobButton.setBackground(new Color(238, 192, 68));
+                createJobButton.setForeground(Color.BLACK);
+            }
+        });
         viewJobsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -224,6 +242,19 @@ public class MainBusinessUI extends JFrame {
                 // For example, navigate to the job seeker section of your application
                 CardLayout cl = (CardLayout) (cards.getLayout());
                 cl.show(cards, "viewJobs");
+            }
+        });
+        viewJobsButton.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                viewJobsButton.setBackground(Color.BLACK);
+                viewJobsButton.setForeground(new Color(238, 192, 68));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                viewJobsButton.setBackground(new Color(238, 192, 68));
+                viewJobsButton.setForeground(Color.BLACK);
             }
         });
         viewBusinessButton.addActionListener(new ActionListener() {
@@ -236,6 +267,49 @@ public class MainBusinessUI extends JFrame {
                 cl.show(cards, "viewBusiness");
             }
         });
+        viewBusinessButton.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                viewBusinessButton.setBackground(Color.BLACK);
+                viewBusinessButton.setForeground(new Color(238, 192, 68));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                viewBusinessButton.setBackground(new Color(238, 192, 68));
+                viewBusinessButton.setForeground(Color.BLACK);
+            }
+        });
+        submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String company = name;
+                String jobTitle = jobTitleField.getText();
+                String jobDescription = jobDescriptionField.getText();
+                String skills = skillsField.getText();
+                String[] skillsarr = skills.split(",");
+                String locations = locationsField.getText();
+                String[] locationsarr = locations.split(",");
+                String salary = salaryField.getText();
+
+                connection.registerJob(company, jobTitle, jobDescription, skillsarr, locationsarr, Double.valueOf(salary));
+
+            }
+        });
+        submitButton.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                submitButton.setBackground(new Color(238, 192, 68));
+                submitButton.setForeground(Color.BLACK);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                submitButton.setBackground(Color.BLACK);
+                submitButton.setForeground(new Color(238, 192, 68));
+            }
+        });
+
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -245,6 +319,19 @@ public class MainBusinessUI extends JFrame {
                 cardLayout.previous(cards);
             }
         });
+        backButton.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                backButton.setBackground(new Color(238, 192, 68));
+                backButton.setForeground(Color.BLACK);
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                backButton.setBackground(Color.BLACK);
+                backButton.setForeground(new Color(238, 192, 68));
+            }
+        });
         backButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -252,6 +339,19 @@ public class MainBusinessUI extends JFrame {
                 // Perform the necessary actions when the user indicates they are seeking a job
                 // For example, navigate to the job seeker section of your application
                 cardLayout.show(cards, "buttons");
+            }
+        });
+        backButton2.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                backButton2.setBackground(Color.BLACK);
+                backButton2.setForeground(new Color(238, 192, 68));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                backButton2.setBackground(new Color(238, 192, 68));
+                backButton2.setForeground(Color.BLACK);
             }
         });
         submitButton2.addActionListener(new ActionListener() {
@@ -269,6 +369,20 @@ public class MainBusinessUI extends JFrame {
                 connection.businesses.updateOne(filter, update);
             }
         });
+        submitButton2.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                submitButton2.setBackground(Color.BLACK);
+                submitButton2.setForeground(new Color(238, 192, 68));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                submitButton2.setBackground(new Color(238, 192, 68));
+                submitButton2.setForeground(Color.BLACK);
+            }
+        });
+
 
 
 
