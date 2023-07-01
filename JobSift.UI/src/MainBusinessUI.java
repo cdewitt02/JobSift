@@ -191,19 +191,19 @@ public class MainBusinessUI extends JFrame {
 
         JButton submitButton2 = new JButton("Submit Changes");
         submitButton2.setBackground(Color.BLACK);
-        submitButton2.setForeground(Color.WHITE);
+        submitButton2.setForeground(new Color(238, 192, 68));
         submitButton2.setHorizontalAlignment(JButton.CENTER);
         viewBusinessCard.add(submitButton2);
 
         JButton backButton2 = new JButton("Back to Main Menu");
         backButton2.setBackground(Color.BLACK);
-        backButton2.setForeground(Color.WHITE);
+        backButton2.setForeground(new Color(238, 192, 68));
         backButton2.setHorizontalAlignment(JButton.CENTER);
         viewBusinessCard.add(backButton2);
 
         //Create viewJobs card
 
-        
+
 
         cards.add(buttonPanel, "buttons");
         cards.add(createCard, "create");
@@ -344,14 +344,15 @@ public class MainBusinessUI extends JFrame {
         backButton2.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                backButton2.setBackground(Color.BLACK);
-                backButton2.setForeground(new Color(238, 192, 68));
+                backButton2.setBackground(new Color(238, 192, 68));
+                backButton2.setForeground(Color.BLACK);
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                backButton2.setBackground(new Color(238, 192, 68));
-                backButton2.setForeground(Color.BLACK);
+
+                backButton2.setBackground(Color.BLACK);
+                backButton2.setForeground(new Color(238, 192, 68));
             }
         });
         submitButton2.addActionListener(new ActionListener() {
@@ -372,14 +373,14 @@ public class MainBusinessUI extends JFrame {
         submitButton2.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                submitButton2.setBackground(Color.BLACK);
-                submitButton2.setForeground(new Color(238, 192, 68));
+                submitButton2.setBackground(new Color(238, 192, 68));
+                submitButton2.setForeground(Color.BLACK);
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                submitButton2.setBackground(new Color(238, 192, 68));
-                submitButton2.setForeground(Color.BLACK);
+                submitButton2.setBackground(Color.BLACK);
+                submitButton2.setForeground(new Color(238, 192, 68));
             }
         });
 
