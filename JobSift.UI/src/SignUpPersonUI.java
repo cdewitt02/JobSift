@@ -8,21 +8,20 @@ import java.io.File;
 
 public class SignUpPersonUI extends JFrame {
     private JTextField nameField;
-
     private JTextField passwordField;
     private JTextField emailField;
     private JButton resumeButton;
     private JTextField skillsField;
     private JTextField locationsField;
     private JTextField salaryField;
-
+    private JTextField jobSeekField;
     private File resume;
 
     public SignUpPersonUI(MongoDBConnection connection) {
         // Set up the JFrame
         setTitle("User Sign-Up");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(650, 450);
+        setSize(650, 500);
         setLocationRelativeTo(null);
         setIconImage(new ImageIcon("C:\\Users\\charl\\Documents\\GitHub\\JobSift\\resources\\JobSift_logo.png").getImage());
 
@@ -30,7 +29,6 @@ public class SignUpPersonUI extends JFrame {
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBackground(new Color(238, 192, 68));
-
 
         //Title
         ImageIcon icon = new ImageIcon("C:\\Users\\charl\\Documents\\GitHub\\JobSift\\resources\\JobSift_logoSmall.png"); // Replace with the path to your left image file
@@ -96,6 +94,14 @@ public class SignUpPersonUI extends JFrame {
         inputsPanel.add(resumeLabel);
         inputsPanel.add(resumeButton);
 
+        // Create the resume label and button
+        JLabel jobSeekLabel = new JLabel("Job in Search of: ");
+        jobSeekLabel.setForeground(Color.BLACK);
+        jobSeekField = new JTextField();
+        jobSeekField.setForeground(Color.BLACK);
+        inputsPanel.add(jobSeekLabel);
+        inputsPanel.add(jobSeekField);
+
         // Create the skills label and field
         JLabel skillsLabel = new JLabel("Skills (Format: Skill1,Skill2 ... no spaces):");
         skillsField = new JTextField();
@@ -145,7 +151,6 @@ public class SignUpPersonUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-
                 // Handle submit button click event
                 String name = nameField.getText();
                 String password = passwordField.getText();
@@ -156,10 +161,11 @@ public class SignUpPersonUI extends JFrame {
                 String locations = locationsField.getText();
                 String[] locationsarr = locations.split(",");
                 String salary = salaryField.getText();
+                String jobSeek = jobSeekField.getText();
 
                 if(passwordc.equals(password) && !password.isEmpty()) {
                     //Call document creator
-                    connection.registerApplicant(name, password, email, skillsarr, locationsarr, Double.valueOf(salary), resume);
+                    connection.registerApplicant(name, password, email, jobSeek, skillsarr, locationsarr, Double.valueOf(salary), resume);
 
                     // Display a confirmation message
                     JOptionPane.showMessageDialog(null, "Sign up successful!");
