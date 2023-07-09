@@ -108,17 +108,13 @@ public class MainPersonUI extends JFrame {
         viewProfileCard.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         viewProfileCard.setBackground(new Color(238, 192, 68));
 
-
         JLabel nameLabel = new JLabel("Business Name:");
         JTextField nameField = new JTextField(name);
         nameLabel.setForeground(Color.BLACK);
 
-
         JLabel emailLabel = new JLabel("Contact E-mail:");
         JTextField emailField = new JTextField(email);
         emailLabel.setForeground(Color.BLACK);
-
-
 
         String skillsstr = String.join(",", skills);
         JLabel skillsLabel = new JLabel("Skills:");
@@ -173,10 +169,56 @@ public class MainPersonUI extends JFrame {
         backButton2.setHorizontalAlignment(JButton.CENTER);
         viewProfileCard.add(backButton2);
 
+        //viewJobsCard
+        List<Document> jobs = new ArrayList<>();
+
+        MongoCursor<Document> cursor = connection.jobs.find().cursor();
+        while (cursor.hasNext()){
+            jobs.add(cursor.next());
+        }
+        cursor.close();
+
+
+        JPanel viewJobsCard = new JPanel(new GridLayout(jobs.size(), 1));
+        viewJobsCard.setBackground(new Color(238, 192, 68)); // Set background color
+
+        for (Document job : jobs) {
+            JPanel jobPanel = new JPanel(new BorderLayout());
+            jobPanel.setBackground(Color.WHITE); // Set job entry background color
+
+            // Create labels for job details
+            JLabel jobTitle = new JLabel("Job Title: " + job.getString("jobTitle"));
+            JLabel companyLabel = new JLabel("Company: " + job.getString("company"));
+            JLabel payLabel = new JLabel("Pay: " + job.get("pay"));
+
+            // Create check mark button
+            JCheckBox checkBox = new JCheckBox();
+            checkBox.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Handle check mark button click event
+                    // Perform the necessary actions when the button is clicked
+
+                }
+            });
+
+            // Add labels and check mark button to the job panel
+            jobPanel.add(jobTitle, BorderLayout.NORTH);
+            jobPanel.add(companyLabel, BorderLayout.CENTER);
+            jobPanel.add(payLabel, BorderLayout.SOUTH);
+            jobPanel.add(checkBox, BorderLayout.EAST);
+
+            // Add job panel to the main panel
+            viewJobsCard.add(jobPanel);
+        }
+
+        // Create scroll pane and add the main panel to it
+        JScrollPane scrollPane = new JScrollPane(viewJobsCard);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         cards.add(buttonPanel, "buttons");
 //        cards.add(createCard, "create");
-////        cards.add(viewJobsCard, "viewJobs");
+        cards.add(scrollPane, "viewJobs");
         cards.add(viewProfileCard, "viewProfile");
 
         //Button Listeners
@@ -431,10 +473,6 @@ public class MainPersonUI extends JFrame {
             this.resumePath = applicant.getString("resume");
         }
         cursor.close();
-    }
-
-    private JPanel getViewAllJobsCard(){
-        return null;
     }
 
     public static void main(String[] args) {
