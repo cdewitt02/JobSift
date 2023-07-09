@@ -173,7 +173,6 @@ public class MainBusinessUI extends JFrame {
             // Read the desired fields from the business document
             email = business.getString("email");
             industry = business.getString("industry");
-            // ... read other fields as needed
         }
 
         // Close the cursor
@@ -368,6 +367,8 @@ public class MainBusinessUI extends JFrame {
                         Updates.set("industry", industryField.getText())
                 );
                 connection.businesses.updateOne(filter, update);
+                dispose();
+                MainBusinessUI mainBusinessUI = new MainBusinessUI(name, connection);
             }
         });
         submitButton2.addFocusListener(new FocusListener() {
