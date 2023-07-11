@@ -36,8 +36,9 @@ public class MainPersonUI extends JFrame {
 
         setTitle("Main Person UI");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 500);
+        setSize(750, 750);
         setLocationRelativeTo(null);
+        setResizable(false);
 
         //Create cards panel
         JPanel cards = new JPanel();
@@ -170,6 +171,49 @@ public class MainPersonUI extends JFrame {
         viewProfileCard.add(backButton2);
 
         //viewJobsCard
+
+        JPanel viewJobsMain = new JPanel();
+        viewJobsMain.setLayout(new BorderLayout());
+        viewJobsMain.setBackground(new Color(238, 192, 68));
+
+        JPanel viewJobsHeaderPanel = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.setColor(new Color(238, 192, 68)); // Adjust the RGB values for different shades of gold
+                g.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
+        viewJobsHeaderPanel.setLayout(new GridBagLayout());
+        GridBagConstraints h = new GridBagConstraints();
+        h.gridy = 0; h.gridx = 0;h.insets = new Insets(5, 5, 5, 5);
+
+        String[] sortchoices = {"Sort by Title", "Sort by Company", "Sort by Pay"};
+
+        JComboBox<String> filterMenu = new JComboBox(sortchoices);
+        filterMenu.setBackground(Color.BLACK);
+        filterMenu.setForeground(new Color(238, 192, 68));
+
+        JMenuItem byTitle = new JMenuItem("Sort by Title");
+        JMenuItem byCompany = new JMenuItem("Sort by Company");
+        JMenuItem byPay = new JMenuItem("Sort by Pay");
+
+        filterMenu.add(byTitle);filterMenu.add(byCompany);filterMenu.add(byPay);
+
+        JButton backbutton3 = new JButton("Back to Main Menu");
+        backbutton3.setBackground(Color.BLACK);
+        backbutton3.setForeground(new Color(238, 192, 68));
+
+        JButton addJobsToSiftList = new JButton("Add Jobs to SiftList");
+        addJobsToSiftList.setBackground(Color.BLACK);
+        addJobsToSiftList.setForeground(new Color(238, 192, 68));
+
+        viewJobsHeaderPanel.add(filterMenu, h);
+        h.gridx++;
+        viewJobsHeaderPanel.add(addJobsToSiftList, h);
+        h.gridx++;
+        viewJobsHeaderPanel.add(backbutton3, h);
+
         List<Document> jobs = new ArrayList<>();
 
         MongoCursor<Document> cursor = connection.jobs.find().cursor();
@@ -178,47 +222,69 @@ public class MainPersonUI extends JFrame {
         }
         cursor.close();
 
+        JPanel viewJobspanel = new JPanel(new GridBagLayout());
+        viewJobspanel.setBackground(new Color(238, 192, 68));
 
-        JPanel viewJobsCard = new JPanel(new GridLayout(jobs.size(), 1));
-        viewJobsCard.setBackground(new Color(238, 192, 68)); // Set background color
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        JPanel tutorialPanel = new JPanel(new BorderLayout());
+        tutorialPanel.setBackground(new Color(238, 192, 68));
+        tutorialPanel.setPreferredSize(new Dimension(450, 50));
+        tutorialPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+
+        JLabel tutorialLabel1 = new JLabel("Each Panel contains info organized as JobTitle, Company, Pay. Use the checkbox to add a job to your SiftList.");
+
+        tutorialLabel1.setForeground(Color.BLACK);
+        tutorialPanel.add(tutorialLabel1, BorderLayout.NORTH);
+        viewJobspanel.add(tutorialPanel, gbc);
+        gbc.gridy++;
 
         for (Document job : jobs) {
             JPanel jobPanel = new JPanel(new BorderLayout());
-            jobPanel.setBackground(Color.WHITE); // Set job entry background color
+            jobPanel.setBackground(new Color(238, 192, 68));
+            jobPanel.setPreferredSize(new Dimension(700, 50));
+            jobPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
 
             // Create labels for job details
-            JLabel jobTitle = new JLabel("Job Title: " + job.getString("jobTitle"));
-            JLabel companyLabel = new JLabel("Company: " + job.getString("company"));
-            JLabel payLabel = new JLabel("Pay: " + job.get("pay"));
-
+            JLabel info = new JLabel(job.getString("jobTitle") + ", " + job.getString("company") + ", $" + job.get("pay") + "/hr" );
+            info.setForeground(Color.BLACK);
             // Create check mark button
             JCheckBox checkBox = new JCheckBox();
+            checkBox.setBackground(new Color(238, 192, 68));
+
             checkBox.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Handle check mark button click event
                     // Perform the necessary actions when the button is clicked
-
+                    System.out.println("Checkbox" + job.getString("jobTitle"));
                 }
             });
 
             // Add labels and check mark button to the job panel
-            jobPanel.add(jobTitle, BorderLayout.NORTH);
-            jobPanel.add(companyLabel, BorderLayout.CENTER);
-            jobPanel.add(payLabel, BorderLayout.SOUTH);
+
+            jobPanel.add(info, BorderLayout.CENTER);
             jobPanel.add(checkBox, BorderLayout.EAST);
 
             // Add job panel to the main panel
-            viewJobsCard.add(jobPanel);
+            viewJobspanel.add(jobPanel, gbc);
+            gbc.gridy++;
         }
 
         // Create scroll pane and add the main panel to it
-        JScrollPane scrollPane = new JScrollPane(viewJobsCard);
+        JScrollPane scrollPane = new JScrollPane(viewJobspanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setBackground(new Color(238, 192, 68));
+
+        viewJobsMain.add(viewJobsHeaderPanel, BorderLayout.NORTH);
+        viewJobsMain.add(scrollPane, BorderLayout.CENTER);
 
         cards.add(buttonPanel, "buttons");
 //        cards.add(createCard, "create");
-        cards.add(scrollPane, "viewJobs");
+        cards.add(viewJobsMain, "viewJobs");
         cards.add(viewProfileCard, "viewProfile");
 
         //Button Listeners
