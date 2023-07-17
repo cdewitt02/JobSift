@@ -45,6 +45,7 @@ public class WelcomePageUI extends JFrame {
         JLabel leftImageLabel = new JLabel(icon);
         JLabel rightImageLabel = new JLabel(icon);
         JLabel titleLabel = new JLabel("Welcome to Job Portal!");
+        titleLabel.setForeground(Color.BLACK);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Increase the font size to 24
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
         titlePanel.add(leftImageLabel, BorderLayout.WEST);
@@ -54,8 +55,8 @@ public class WelcomePageUI extends JFrame {
 
         // Create the question label
         JLabel questionLabel = new JLabel("Are you seeking a job or looking to fill a role in your business?");
+        questionLabel.setForeground(Color.BLACK);
         questionLabel.setFont(new Font("Arial", Font.PLAIN, 16)); // Increase the font size to 24
-
         questionLabel.setHorizontalAlignment(JLabel.CENTER);
 
         // Create the buttons panel

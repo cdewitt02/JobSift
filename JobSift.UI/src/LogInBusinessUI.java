@@ -46,6 +46,7 @@ public class LogInBusinessUI extends JFrame{
         JLabel leftImageLabel = new JLabel(icon);
         JLabel rightImageLabel = new JLabel(icon);
         JLabel titleLabel = new JLabel("JobSift Business Log-In");
+        titleLabel.setForeground(Color.BLACK);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
         titlePanel.add(leftImageLabel, BorderLayout.WEST);
@@ -66,6 +67,7 @@ public class LogInBusinessUI extends JFrame{
 
         // Create the username label and field
         JLabel usernameLabel = new JLabel("Name of Business:");
+        usernameLabel.setForeground(Color.BLACK);
         JTextField usernameField = new JTextField();
         loginPanel.add(usernameLabel);
         loginPanel.add(usernameField);

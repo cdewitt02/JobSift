@@ -1,7 +1,10 @@
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Updates;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -28,6 +31,8 @@ public class MainPersonUI extends JFrame {
     private double salary;
     private String resumePath;
     private MongoDBConnection connection;
+
+    private List<Object> siftList = new ArrayList<>();
 
     public MainPersonUI(String name, MongoDBConnection connection) {
         this.connection = connection;
@@ -187,38 +192,25 @@ public class MainPersonUI extends JFrame {
         viewJobsHeaderPanel.setLayout(new GridBagLayout());
         GridBagConstraints h = new GridBagConstraints();
         h.gridy = 0; h.gridx = 0;h.insets = new Insets(5, 5, 5, 5);
-
-        String[] sortchoices = {"Sort by Title", "Sort by Company", "Sort by Pay"};
-
-        JComboBox<String> filterMenu = new JComboBox(sortchoices);
-        filterMenu.setBackground(Color.BLACK);
-        filterMenu.setForeground(new Color(238, 192, 68));
-
-        JMenuItem byTitle = new JMenuItem("Sort by Title");
-        JMenuItem byCompany = new JMenuItem("Sort by Company");
-        JMenuItem byPay = new JMenuItem("Sort by Pay");
-
-        filterMenu.add(byTitle);filterMenu.add(byCompany);filterMenu.add(byPay);
-
-        JButton backbutton3 = new JButton("Back to Main Menu");
-        backbutton3.setBackground(Color.BLACK);
-        backbutton3.setForeground(new Color(238, 192, 68));
+        
+        JButton backButton3 = new JButton("Back to Main Menu");
+        backButton3.setBackground(Color.BLACK);
+        backButton3.setForeground(new Color(238, 192, 68));
 
         JButton addJobsToSiftList = new JButton("Add Jobs to SiftList");
         addJobsToSiftList.setBackground(Color.BLACK);
         addJobsToSiftList.setForeground(new Color(238, 192, 68));
 
-        viewJobsHeaderPanel.add(filterMenu, h);
-        h.gridx++;
         viewJobsHeaderPanel.add(addJobsToSiftList, h);
         h.gridx++;
-        viewJobsHeaderPanel.add(backbutton3, h);
+        viewJobsHeaderPanel.add(backButton3, h);
 
         List<Document> jobs = new ArrayList<>();
 
         MongoCursor<Document> cursor = connection.jobs.find().cursor();
         while (cursor.hasNext()){
             jobs.add(cursor.next());
+            siftList.add((Object)cursor.next().get("_id"));
         }
         cursor.close();
 
@@ -261,6 +253,7 @@ public class MainPersonUI extends JFrame {
                     // Handle check mark button click event
                     // Perform the necessary actions when the button is clicked
                     System.out.println("Checkbox" + job.getString("jobTitle"));
+                    System.out.println("Checkbox" + job.get("_id"));
                 }
             });
 
@@ -283,7 +276,7 @@ public class MainPersonUI extends JFrame {
         viewJobsMain.add(scrollPane, BorderLayout.CENTER);
 
         cards.add(buttonPanel, "buttons");
-//        cards.add(createCard, "create");
+        cards.add(getSiftList(), "siftList");
         cards.add(viewJobsMain, "viewJobs");
         cards.add(viewProfileCard, "viewProfile");
 
@@ -357,7 +350,7 @@ public class MainPersonUI extends JFrame {
                 // Perform the necessary actions when the user indicates they are seeking a job
                 // For example, navigate to the job seeker section of your application
                 CardLayout cl = (CardLayout) (cards.getLayout());
-                cl.show(cards, "viewBusiness");
+                cl.show(cards, "siftList");
             }
         });
         siftListButton.addFocusListener(new FocusListener() {
@@ -373,58 +366,7 @@ public class MainPersonUI extends JFrame {
                 siftListButton.setForeground(Color.BLACK);
             }
         });
-//        submitButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                String company = name;
-//                String jobTitle = jobTitleField.getText();
-//                String jobDescription = jobDescriptionField.getText();
-//                String skills = skillsField.getText();
-//                String[] skillsarr = skills.split(",");
-//                String locations = locationsField.getText();
-//                String[] locationsarr = locations.split(",");
-//                String salary = salaryField.getText();
-//
-//                connection.registerJob(company, jobTitle, jobDescription, skillsarr, locationsarr, Double.valueOf(salary));
-//
-//            }
-//        });
-//        submitButton.addFocusListener(new FocusListener() {
-//            @Override
-//            public void focusGained(FocusEvent e) {
-//                submitButton.setBackground(new Color(238, 192, 68));
-//                submitButton.setForeground(Color.BLACK);
-//            }
-//
-//            @Override
-//            public void focusLost(FocusEvent e) {
-//                submitButton.setBackground(Color.BLACK);
-//                submitButton.setForeground(new Color(238, 192, 68));
-//            }
-//        });
-//
-//        backButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                // Handle job seeker button click event
-//                // Perform the necessary actions when the user indicates they are seeking a job
-//                // For example, navigate to the job seeker section of your application
-//                cardLayout.previous(cards);
-//            }
-//        });
-//        backButton.addFocusListener(new FocusListener() {
-//            @Override
-//            public void focusGained(FocusEvent e) {
-//                backButton.setBackground(new Color(238, 192, 68));
-//                backButton.setForeground(Color.BLACK);
-//            }
-//
-//            @Override
-//            public void focusLost(FocusEvent e) {
-//                backButton.setBackground(Color.BLACK);
-//                backButton.setForeground(new Color(238, 192, 68));
-//            }
-//        });
+
         backButton2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -499,6 +441,28 @@ public class MainPersonUI extends JFrame {
                 submitButton2.setForeground(new Color(238, 192, 68));
             }
         });
+        backButton3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Handle job seeker button click event
+                // Perform the necessary actions when the user indicates they are seeking a job
+                // For example, navigate to the job seeker section of your application
+                cardLayout.show(cards, "buttons");
+            }
+        });
+        backButton3.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                backButton2.setBackground(new Color(238, 192, 68));
+                backButton2.setForeground(Color.BLACK);
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+
+                backButton2.setBackground(Color.BLACK);
+                backButton2.setForeground(new Color(238, 192, 68));
+            }
+        });
 
         mainPanel.add(headerPanel, BorderLayout.NORTH);
         c.gridy = 0;
@@ -522,6 +486,146 @@ public class MainPersonUI extends JFrame {
         setVisible(true);
     }
 
+
+    private JPanel getSiftList(){
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+
+        JPanel cards = new JPanel();
+        CardLayout layout = new CardLayout();
+        cards.setLayout(layout);
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridBagLayout());
+        GridBagConstraints b = new GridBagConstraints();
+        b.gridx = 0; b.gridy = 0; b.insets = new Insets(0,5,0,5); b.fill = GridBagConstraints.HORIZONTAL;
+        buttonPanel.setBackground(new Color(238, 192, 68));
+        buttonPanel.setPreferredSize(new Dimension(getWidth(), 75));
+
+        JButton next = new JButton("Next");
+        next.setBackground(Color.BLACK);
+        next.setForeground(new Color(238, 192, 68));
+        next.setPreferredSize(new Dimension(100,50));
+
+        JButton prev = new JButton("Previous");
+        prev.setBackground(Color.BLACK);
+        prev.setForeground(new Color(238, 192, 68));
+        prev.setPreferredSize(new Dimension(100,50));
+
+
+        JButton backButton = new JButton("Back to Main Menu");
+        backButton.setBackground(Color.BLACK);
+        backButton.setForeground(new Color(238, 192, 68));
+        backButton.setPreferredSize(new Dimension(150,50));
+
+
+        buttonPanel.add(prev, b);
+        b.gridx++;
+        buttonPanel.add(backButton, b);
+        b.gridx++;
+        buttonPanel.add(next, b);
+
+        for(Object job : siftList){
+//            String id = (String) job;
+            JPanel jobPanel = new JPanel();
+            jobPanel.setLayout(new GridBagLayout());
+            GridBagConstraints c = new GridBagConstraints();
+            c.gridx = 0; c.gridy = 0; c.fill = GridBagConstraints.HORIZONTAL;
+
+            Document doc = connection.jobs.find(eq("_id", job)).first();
+            JLabel jobTitle = new JLabel("Job Title: " + doc.get("jobTitle"));
+            JLabel company = new JLabel("Company: " + doc.get("company"));
+            JLabel jobDescription = new JLabel("Job Description: " + doc.get("jobTitle"));
+            JLabel requiredSkills = new JLabel("Skills required: " + doc.get("jobTitle"));
+            JLabel locations = new JLabel("Location(s): " + doc.get("jobTitle"));
+            JLabel pay = new JLabel("Pay: " + doc.get("pay"));
+
+            jobPanel.add(jobTitle, c);
+            c.gridy++;
+            jobPanel.add(company, c);
+            c.gridy++;
+            jobPanel.add(jobDescription, c);
+            c.gridy++;
+            jobPanel.add(requiredSkills, c);
+            c.gridy++;
+            jobPanel.add(locations, c);
+            c.gridy++;
+            jobPanel.add(pay, c);
+
+            cards.add(jobPanel);
+        }
+        next.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Handle job seeker button click event
+                // Perform the necessary actions when the user indicates they are seeking a job
+                // For example, navigate to the job seeker section of your application
+                layout.next(cards);
+            }
+        });
+        next.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                next.setBackground(new Color(238, 192, 68));
+                next.setForeground(Color.BLACK);
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+
+                next.setBackground(Color.BLACK);
+                next.setForeground(new Color(238, 192, 68));
+            }
+        });
+        prev.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Handle job seeker button click event
+                // Perform the necessary actions when the user indicates they are seeking a job
+                // For example, navigate to the job seeker section of your application
+                layout.previous(cards);
+            }
+        });
+        prev.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                prev.setBackground(new Color(238, 192, 68));
+                prev.setForeground(Color.BLACK);
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                prev.setBackground(Color.BLACK);
+                prev.setForeground(new Color(238, 192, 68));
+            }
+        });
+
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Handle job seeker button click event
+                // Perform the necessary actions when the user indicates they are seeking a job
+                // For example, navigate to the job seeker section of your application
+                dispose();
+                MainPersonUI mainPersonUI = new MainPersonUI(name, connection);
+            }
+        });
+        backButton.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                backButton.setBackground(new Color(238, 192, 68));
+                backButton.setForeground(Color.BLACK);
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                backButton.setBackground(Color.BLACK);
+                backButton.setForeground(new Color(238, 192, 68));
+            }
+        });
+
+        mainPanel.add(cards, BorderLayout.CENTER);
+        mainPanel.add(buttonPanel,BorderLayout.SOUTH);
+
+        return mainPanel;
+    }
     private void updateInfo(){
         Document doc = connection.applicants.find(new Document("name", name)).first();
 

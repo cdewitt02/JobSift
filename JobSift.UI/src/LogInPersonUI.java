@@ -32,6 +32,7 @@ public class LogInPersonUI extends JFrame{
         JLabel leftImageLabel = new JLabel(icon);
         JLabel rightImageLabel = new JLabel(icon);
         JLabel titleLabel = new JLabel("JobSift User Log-In");
+        titleLabel.setForeground(Color.BLACK);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
         titlePanel.add(leftImageLabel, BorderLayout.WEST);
@@ -63,12 +64,14 @@ public class LogInPersonUI extends JFrame{
 
         // Create the username label and field
         JLabel usernameLabel = new JLabel("Username:");
+        usernameLabel.setForeground(Color.BLACK);
         JTextField usernameField = new JTextField();
         loginPanel.add(usernameLabel);
         loginPanel.add(usernameField);
 
         // Create the password label and field
         JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setForeground(Color.BLACK);
         JTextField passwordField = new JPasswordField();
         loginPanel.add(passwordLabel);
         loginPanel.add(passwordField);
