@@ -458,57 +458,89 @@ public class MainPersonUI extends JFrame {
                 for(Object job : siftList){
                     JPanel jobPanel = new JPanel();
                     jobPanel.setBackground(new Color(238, 192, 68));
-                    jobPanel.setLayout(new BoxLayout(jobPanel, BoxLayout.Y_AXIS));
-
+                    jobPanel.setLayout(new GridBagLayout());
+                    GridBagConstraints c = new GridBagConstraints();
+                    c.gridx = 0; c.gridy = 0; c.fill = GridBagConstraints.HORIZONTAL;
                     Document doc = connection.jobs.find(eq("_id", job)).first();
+                    String skills = String.join(",",(List<String>)doc.get("requiredSkills"));
+                    String locationsarr = String.join(",",(List<String>)doc.get("locations"));
 
-                    JLabel jobTitle = new JLabel("Job Title: " + doc.get("jobTitle"));
-                    jobTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
+                    JLabel jobTitleL = new JLabel("Job Title:"); JLabel jobTitle = new JLabel(doc.getString("jobTitle"));
 
-                    JLabel company = new JLabel("Company: " + doc.get("company"));
-                    company.setAlignmentX(Component.LEFT_ALIGNMENT);
+                    JLabel companyL = new JLabel("Company:"); JLabel company = new JLabel(doc.getString("company"));
 
-                    JLabel jobDescription = new JLabel("Job Description: " + doc.get("jobDescription"));
-                    jobDescription.setAlignmentX(Component.LEFT_ALIGNMENT);
+                    JLabel jobDescriptionL = new JLabel("Job Description:");JLabel jobDescription = new JLabel(doc.getString("jobDescription"));
 
-                    JLabel requiredSkills = new JLabel("Skills required: " + doc.get("requiredSkills"));
-                    requiredSkills.setAlignmentX(Component.LEFT_ALIGNMENT);
+                    JLabel requiredSkillsL = new JLabel("Skills required:"); JLabel requiredSkills = new JLabel(skills);
 
-                    JLabel locations = new JLabel("Location(s): " + doc.get("locations"));
-                    locations.setAlignmentX(Component.LEFT_ALIGNMENT);
+                    JLabel locationsL = new JLabel("Location(s):"); JLabel locations = new JLabel(locationsarr);
 
-                    JLabel pay = new JLabel("Pay: " + doc.get("pay") + " $/hr");
-                    pay.setAlignmentX(Component.LEFT_ALIGNMENT);
+                    JLabel payL = new JLabel("Pay:"); JLabel pay = new JLabel(doc.get("pay") + " $/hr");
 
-                    JLabel email = new JLabel("Contact Email: " + doc.get("contactEmail"));
-                    email.setAlignmentX(Component.LEFT_ALIGNMENT);
+                    JLabel emailL = new JLabel("Contact Email:"); JLabel email = new JLabel(doc.getString("contactEmail"));
 
                     Map<TextAttribute, Integer> fontAttributes = new HashMap<>();
                     fontAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
                     Font headerFont = new Font("Roboto", Font.BOLD, 28).deriveFont(fontAttributes);
+                    Font regular = new Font("Roboto", Font.PLAIN, 28);
 
-                    jobTitle.setFont(headerFont);
+
+                    jobTitleL.setFont(headerFont);
+                    jobTitleL.setForeground(Color.BLACK);
+                    jobTitle.setFont(regular);
                     jobTitle.setForeground(Color.BLACK);
-                    company.setFont(headerFont);
+                    companyL.setFont(headerFont);
+                    companyL.setForeground(Color.BLACK);
+                    company.setFont(regular);
                     company.setForeground(Color.BLACK);
-                    jobDescription.setFont(headerFont);
+                    jobDescriptionL.setFont(headerFont);
+                    jobDescriptionL.setForeground(Color.BLACK);
+                    jobDescription.setFont(regular);
                     jobDescription.setForeground(Color.BLACK);
-                    requiredSkills.setFont(headerFont);
+                    requiredSkillsL.setFont(headerFont);
+                    requiredSkillsL.setForeground(Color.BLACK);
+                    requiredSkills.setFont(regular);
                     requiredSkills.setForeground(Color.BLACK);
-                    locations.setFont(headerFont);
+                    locationsL.setFont(headerFont);
+                    locationsL.setForeground(Color.BLACK);
+                    locations.setFont(regular);
                     locations.setForeground(Color.BLACK);
-                    pay.setFont(headerFont);
+                    payL.setFont(headerFont);
+                    payL.setForeground(Color.BLACK);
+                    pay.setFont(regular);
                     pay.setForeground(Color.BLACK);
-                    email.setFont(headerFont);
+                    emailL.setFont(headerFont);
+                    emailL.setForeground(Color.BLACK);
+                    email.setFont(regular);
                     email.setForeground(Color.BLACK);
 
-                    jobPanel.add(jobTitle);
-                    jobPanel.add(company);
-                    jobPanel.add(jobDescription);
-                    jobPanel.add(requiredSkills);
-                    jobPanel.add(locations);
-                    jobPanel.add(pay);
-                    jobPanel.add(email);
+                    jobPanel.add(jobTitleL, c);
+                    c.gridx++;
+                    jobPanel.add(jobTitle, c);
+                    c.gridy++; c.gridx--;
+                    jobPanel.add(companyL, c);
+                    c.gridx++;
+                    jobPanel.add(company, c);
+                    c.gridy++; c.gridx--;
+                    jobPanel.add(jobDescriptionL, c);
+                    c.gridx++;
+                    jobPanel.add(jobDescription, c);
+                    c.gridy++; c.gridx--;
+                    jobPanel.add(requiredSkillsL, c);
+                    c.gridx++;
+                    jobPanel.add(requiredSkills, c);
+                    c.gridy++; c.gridx--;
+                    jobPanel.add(locationsL, c);
+                    c.gridx++;
+                    jobPanel.add(locations, c);
+                    c.gridy++; c.gridx--;
+                    jobPanel.add(payL, c);
+                    c.gridx++;
+                    jobPanel.add(pay, c);
+                    c.gridy++; c.gridx--;
+                    jobPanel.add(emailL, c);
+                    c.gridx++;
+                    jobPanel.add(email, c);
 
                     siftcards.add(jobPanel);
                 }
