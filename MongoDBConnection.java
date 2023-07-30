@@ -66,7 +66,7 @@ public class MongoDBConnection {
 
         System.out.println("Applicant registered successfully.");
     }
-    public void registerJob(String company, String jobTitle, String jobDescription, String[] requiredSkills, String[] preferredLocations, double salary) {
+    public void registerJob(String company, String jobTitle, String jobDescription, String[] requiredSkills, String[] preferredLocations, double salary, String contactEmail) {
         List<String> skills_list = Arrays.asList(requiredSkills);
         List<String> locations_list = Arrays.asList(preferredLocations);
 
@@ -75,13 +75,10 @@ public class MongoDBConnection {
                 .append("jobDescription", jobDescription)
                 .append("requiredSkills", skills_list)
                 .append("locations", locations_list)
-                .append("pay", salary);
+                .append("pay", salary)
+                .append("contactEmail", contactEmail);
         jobs.insertOne(job);
     }
-    public MongoDatabase getDatabase() {
-        return database;
-    }
-
     public void closeConnection() {
         if (mongoClient != null) {
             mongoClient.close();

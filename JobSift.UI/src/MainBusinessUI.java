@@ -291,7 +291,7 @@ public class MainBusinessUI extends JFrame {
                 String[] locationsarr = locations.split(",");
                 String salary = salaryField.getText();
 
-                connection.registerJob(company, jobTitle, jobDescription, skillsarr, locationsarr, Double.valueOf(salary));
+                connection.registerJob(company, jobTitle, jobDescription, skillsarr, locationsarr, Double.valueOf(salary), email);
 
             }
         });

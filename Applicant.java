@@ -7,6 +7,8 @@ public class Applicant {
     private File resume;
     private String[] skills;
     private String[] preferredLocations;
+
+    private Job[] siftList;
     private double expectedSalary;
 
     public Applicant(){
@@ -15,14 +17,16 @@ public class Applicant {
         this.resume = null;
         this.skills = null;
         this.preferredLocations = null;
+        this.siftList = null;
         this.expectedSalary = -1;
     }
-    public Applicant(String name, String email, File resume, String[] skills, String[] preferredLocations, double expectedSalary) {
+    public Applicant(String name, String email, File resume, String[] skills, String[] preferredLocations, Job[] siftList, double expectedSalary) {
         this.name = name;
         this.email = email;
         this.resume = resume;
         this.skills = skills;
         this.preferredLocations = preferredLocations;
+        this.siftList = siftList;
         this.expectedSalary = expectedSalary;
     }
 
