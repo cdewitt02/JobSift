@@ -11,18 +11,27 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.font.TextAttribute;
+import java.util.*;
+import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
 
 public class MainBusinessUI extends JFrame {
     private String email;
-    private String industry = null;
+    private String name;
+    private MongoDBConnection connection;
+    private List<Object> allChecked = new ArrayList<>();
+    private Set<Object> siftList = new HashSet<>();
 
     public MainBusinessUI(String name, MongoDBConnection connection) {
+        this.connection = connection;
+        this.name = name;
         setTitle("Main Business UI");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 500);
+        setSize(750, 750);
         setLocationRelativeTo(null);
+        setResizable(false);
 
         //Create cards panel
         JPanel cards = new JPanel();
@@ -39,6 +48,7 @@ public class MainBusinessUI extends JFrame {
         headerPanel.setPreferredSize(new Dimension(getWidth(), 50));
         headerPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
 
+        //label for header
         ImageIcon icon = new ImageIcon("C:\\Users\\charl\\Documents\\GitHub\\JobSift\\resources\\JobSift_logoSmall.png"); // Replace with the path to your left image file
         setIconImage(new ImageIcon("C:\\Users\\charl\\Documents\\GitHub\\JobSift\\resources\\JobSift_logo.png").getImage());
 
@@ -70,29 +80,32 @@ public class MainBusinessUI extends JFrame {
         createJobButton.setBackground(new Color(238, 192, 68));
         createJobButton.setForeground(Color.BLACK);
         createJobButton.setBorder(buttonBorder);
-        createJobButton.setPreferredSize(new Dimension(150, 25)); // Set the preferred size for the button
+        createJobButton.setPreferredSize(new Dimension(300, 50)); // Set the preferred size for the button
 
         JButton viewJobsButton = new JButton("View Jobs");
         viewJobsButton.setBackground(new Color(238, 192, 68));
         viewJobsButton.setForeground(Color.BLACK);
         viewJobsButton.setBorder(buttonBorder);
-        viewJobsButton.setPreferredSize(new Dimension(150, 25)); // Set the preferred size for the button
+        viewJobsButton.setPreferredSize(new Dimension(300, 50)); // Set the preferred size for the button
 
         JButton viewBusinessButton = new JButton("View Business");
         viewBusinessButton.setBackground(new Color(238, 192, 68));
         viewBusinessButton.setForeground(Color.BLACK);
         viewBusinessButton.setBorder(buttonBorder);
-        viewBusinessButton.setPreferredSize(new Dimension(150, 25)); // Set the preferred size for the button
+        viewBusinessButton.setPreferredSize(new Dimension(300, 50)); // Set the preferred size for the button
 
-        //Create Cards
+        JButton siftListButton = new JButton("Sift List");
+        siftListButton.setBackground(new Color(238, 192, 68));
+        siftListButton.setForeground(Color.BLACK);
+        siftListButton.setBorder(buttonBorder);
+        siftListButton.setPreferredSize(new Dimension(300, 50)); // Set the preferred size for the button
+
+        //Create Card
 
         JPanel createCard = new JPanel();
         createCard.setLayout(new GridLayout(8, 2, 10, 10));
         createCard.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         createCard.setBackground(new Color(238, 192, 68));
-
-        // GET NAME FROM SOMEWHERE ELSE?
-
 
         // Create the email label and field
         JLabel jobTitleLabel = new JLabel("Job Title:");
@@ -146,8 +159,6 @@ public class MainBusinessUI extends JFrame {
         backButton.setForeground(new Color(238, 192, 68));
         backButton.setHorizontalAlignment(JButton.CENTER);
         createCard.add(backButton);
-//        JPanel viewJobsCard = getViewJobsCard();
-//        JPanel viewBusinessCard = getViewBusinessCard();
 
         //Create viewBusinessCard
 
@@ -168,6 +179,7 @@ public class MainBusinessUI extends JFrame {
         // Execute the query and get the cursor
         MongoCursor<Document> cursor = connection.businesses.find(doc).iterator();
         // Iterate over the results
+        String industry = null;
         while (cursor.hasNext()) {
             Document business = cursor.next();
             // Read the desired fields from the business document
@@ -176,10 +188,9 @@ public class MainBusinessUI extends JFrame {
         }
 
         // Close the cursor
-
         cursor.close();
-        JTextField emailField = new JTextField(email);
 
+        JTextField emailField = new JTextField(email);
         JLabel industryLabel = new JLabel("Industry:");
         JTextField industryField = new JTextField(industry);
 
@@ -200,14 +211,161 @@ public class MainBusinessUI extends JFrame {
         backButton2.setHorizontalAlignment(JButton.CENTER);
         viewBusinessCard.add(backButton2);
 
-        //Create viewJobs card
+        //Create viewPeople card
 
+        JPanel viewPeopleCard = new JPanel();
+        viewPeopleCard.setLayout(new BorderLayout());
+        viewPeopleCard.setBackground(new Color(238, 192, 68));
+
+        JPanel viewPeopleMain = new JPanel();
+        viewPeopleMain.setLayout(new BorderLayout());
+        viewPeopleMain.setBackground(new Color(238, 192, 68));
+
+        JPanel viewPeopleHeaderPanel = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.setColor(new Color(238, 192, 68)); // Adjust the RGB values for different shades of gold
+                g.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
+        viewPeopleHeaderPanel.setLayout(new GridBagLayout());
+        GridBagConstraints h = new GridBagConstraints();
+        h.gridy = 0; h.gridx = 0;h.insets = new Insets(5, 5, 5, 5);
+
+        JButton backButton3 = new JButton("Back to Main Menu");
+        backButton3.setBackground(Color.BLACK);
+        backButton3.setForeground(new Color(238, 192, 68));
+
+        JButton addPeopleToSiftList = new JButton("Add People to SiftList");
+        addPeopleToSiftList.setBackground(Color.BLACK);
+        addPeopleToSiftList.setForeground(new Color(238, 192, 68));
+
+        viewPeopleHeaderPanel.add(addPeopleToSiftList, h);
+        h.gridx++;
+        viewPeopleHeaderPanel.add(backButton3, h);
+
+        List<Document> applicants = new ArrayList<>();
+
+        MongoCursor<Document> cursor2 = connection.applicants.find().cursor();
+        while (cursor2.hasNext()){
+            applicants.add(cursor2.next());
+        }
+        cursor2.close();
+
+        JPanel viewPeoplepanel = new JPanel(new GridBagLayout());
+        viewPeoplepanel.setBackground(new Color(238, 192, 68));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        JPanel tutorialPanel = new JPanel(new BorderLayout());
+        tutorialPanel.setBackground(new Color(238, 192, 68));
+        tutorialPanel.setPreferredSize(new Dimension(450, 50));
+        tutorialPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+
+        JLabel tutorialLabel1 = new JLabel("Each Panel contains info organized as Name, Company, Pay. Use the checkbox to add a job to your SiftList.");
+
+        tutorialLabel1.setForeground(Color.BLACK);
+        tutorialPanel.add(tutorialLabel1, BorderLayout.NORTH);
+        viewPeoplepanel.add(tutorialPanel, gbc);
+        gbc.gridy++;
+
+        for (Document person : applicants) {
+            JPanel personPanel = new JPanel(new BorderLayout());
+            personPanel.setBackground(new Color(238, 192, 68));
+            personPanel.setPreferredSize(new Dimension(700, 50));
+            personPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+
+            List<String> skillsarr = (List<String>) person.get("skills");
+            String skills = String.join(", ", skillsarr);
+
+            // Create labels for job details
+            JLabel info = new JLabel(person.getString("name") + ", " + skills + ", $" + person.get("salary") + "/hr" );
+            info.setForeground(Color.BLACK);
+            // Create check mark button
+            JCheckBox checkBox = new JCheckBox();
+            checkBox.setBackground(new Color(238, 192, 68));
+
+            checkBox.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    // Handle check mark button click event
+                    // Perform the necessary actions when the button is clicked
+                    if(checkBox.isSelected()) {
+                        allChecked.add(person.get("_id"));
+                    }else{
+                        allChecked.remove(person.get("_id"));
+                    }
+                }
+            });
+
+            // Add labels and check mark button to the job panel
+
+            personPanel.add(info, BorderLayout.CENTER);
+            personPanel.add(checkBox, BorderLayout.EAST);
+
+            // Add job panel to the main panel
+            viewPeoplepanel.add(personPanel, gbc);
+            gbc.gridy++;
+        }
+
+        // Create scroll pane and add the main panel to it
+        JScrollPane scrollPane = new JScrollPane(viewPeoplepanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setBackground(new Color(238, 192, 68));
+
+        viewPeopleCard.add(viewPeopleHeaderPanel, BorderLayout.NORTH);
+        viewPeopleCard.add(scrollPane, BorderLayout.CENTER);
+
+        ///////////////SIFTLIST///////////////////////////
+        JPanel siftMainPanel = new JPanel();
+        siftMainPanel.setLayout(new BorderLayout());
+
+        JPanel siftcards = new JPanel();
+        CardLayout layout = new CardLayout();
+        siftcards.setLayout(layout);
+
+        JPanel siftbuttonPanel = new JPanel();
+        siftbuttonPanel.setLayout(new GridBagLayout());
+        GridBagConstraints b = new GridBagConstraints();
+        b.gridx = 0; b.gridy = 0; b.insets = new Insets(0,5,0,5); b.fill = GridBagConstraints.HORIZONTAL;
+        siftbuttonPanel.setBackground(new Color(238, 192, 68));
+        siftbuttonPanel.setPreferredSize(new Dimension(getWidth(), 75));
+        siftbuttonPanel.setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, Color.BLACK));
+
+        JButton next = new JButton("Next");
+        next.setBackground(Color.BLACK);
+        next.setForeground(new Color(238, 192, 68));
+        next.setPreferredSize(new Dimension(100,50));
+
+        JButton prev = new JButton("Previous");
+        prev.setBackground(Color.BLACK);
+        prev.setForeground(new Color(238, 192, 68));
+        prev.setPreferredSize(new Dimension(100,50));
+
+        JButton backButton4 = new JButton("Back to Main Menu");
+        backButton4.setBackground(Color.BLACK);
+        backButton4.setForeground(new Color(238, 192, 68));
+        backButton4.setPreferredSize(new Dimension(150,50));
+
+        siftbuttonPanel.add(prev, b);
+        b.gridx++;
+        siftbuttonPanel.add(backButton4, b);
+        b.gridx++;
+        siftbuttonPanel.add(next, b);
+
+        siftMainPanel.add(siftcards, BorderLayout.CENTER);
+        siftMainPanel.add(siftbuttonPanel,BorderLayout.SOUTH);
 
 
         cards.add(buttonPanel, "buttons");
         cards.add(createCard, "create");
-//        cards.add(viewJobsCard, "viewJobs");
+        cards.add(viewPeopleCard, "viewPeople");
         cards.add(viewBusinessCard, "viewBusiness");
+        cards.add(siftMainPanel, "siftList");
 
         //Button Listeners
         createJobButton.addActionListener(new ActionListener() {
@@ -240,7 +398,7 @@ public class MainBusinessUI extends JFrame {
                 // Perform the necessary actions when the user indicates they are seeking a job
                 // For example, navigate to the job seeker section of your application
                 CardLayout cl = (CardLayout) (cards.getLayout());
-                cl.show(cards, "viewJobs");
+                cl.show(cards, "viewPeople");
             }
         });
         viewJobsButton.addFocusListener(new FocusListener() {
@@ -384,27 +542,207 @@ public class MainBusinessUI extends JFrame {
                 submitButton2.setForeground(new Color(238, 192, 68));
             }
         });
+        backButton3.addActionListener(e -> {
+            // Handle job seeker button click event
+            // Perform the necessary actions when the user indicates they are seeking a job
+            // For example, navigate to the job seeker section of your application
+            cardLayout.show(cards, "buttons");
+        });
+        backButton3.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                backButton2.setBackground(new Color(238, 192, 68));
+                backButton2.setForeground(Color.BLACK);
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+
+                backButton2.setBackground(Color.BLACK);
+                backButton2.setForeground(new Color(238, 192, 68));
+            }
+        });
+
+        addPeopleToSiftList.addActionListener(e -> siftList.addAll(allChecked));
+        addPeopleToSiftList.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                backButton2.setBackground(new Color(238, 192, 68));
+                backButton2.setForeground(Color.BLACK);
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+
+                backButton2.setBackground(Color.BLACK);
+                backButton2.setForeground(new Color(238, 192, 68));
+            }
+        });
+
+        siftListButton.addActionListener(e -> {
+            // Handle job seeker button click event
+            // Perform the necessary actions when the user indicates they are seeking a job
+            // For example, navigate to the job seeker section of your application
+            CardLayout cl = (CardLayout) (cards.getLayout());
+            for(Object person : siftList){
+                JPanel personPanel = new JPanel();
+                personPanel.setBackground(new Color(238, 192, 68));
+                personPanel.setLayout(new GridBagLayout());
+                GridBagConstraints c1 = new GridBagConstraints();
+                c1.gridx = 0; c1.gridy = 0; c1.fill = GridBagConstraints.HORIZONTAL;
+                Document doc2 = connection.applicants.find(eq("_id", person)).first();
+                String skills = String.join(",",(List<String>)doc2.get("skills"));
+                String locationsText = String.join(",",(List<String>)doc2.get("locations"));
+
+                JLabel nameL = new JLabel("Name:"); JLabel personName = new JLabel(doc2.getString("name"));
+
+                JLabel emailL = new JLabel("Email:"); JLabel email = new JLabel(doc2.getString("email"));
+
+//                JLabel resumeL = new JLabel("Resume:"); JLabel resumeButton = new JLabel(doc2.getString("company"));
+
+                JLabel skillsL = new JLabel("Skills:"); JLabel skillsText = new JLabel(skills);
+
+                JLabel locationsL = new JLabel("Preferred Location(s):"); JLabel locations = new JLabel(locationsText);
+
+                JLabel payL = new JLabel("Expected Pay:"); JLabel pay = new JLabel(doc2.get("pay") + " $/hr");
 
 
+                Map<TextAttribute, Integer> fontAttributes = new HashMap<>();
+                fontAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+                Font headerFont = new Font("Roboto", Font.BOLD, 28).deriveFont(fontAttributes);
+                Font regular = new Font("Roboto", Font.PLAIN, 28);
 
 
+                nameL.setFont(headerFont);
+                nameL.setForeground(Color.BLACK);
+                personName.setFont(regular);
+                personName.setForeground(Color.BLACK);
+                skillsL.setFont(headerFont);
+                skillsL.setForeground(Color.BLACK);
+                skillsText.setFont(regular);
+                skillsText.setForeground(Color.BLACK);
+                locationsL.setFont(headerFont);
+                locationsL.setForeground(Color.BLACK);
+                locations.setFont(regular);
+                locations.setForeground(Color.BLACK);
+                payL.setFont(headerFont);
+                payL.setForeground(Color.BLACK);
+                pay.setFont(regular);
+                pay.setForeground(Color.BLACK);
+                emailL.setFont(headerFont);
+                emailL.setForeground(Color.BLACK);
+                email.setFont(regular);
+                email.setForeground(Color.BLACK);
+
+                personPanel.add(nameL, c1);
+                c1.gridx++;
+                personPanel.add(personName, c1);
+                c1.gridy++; c1.gridx--;
+                personPanel.add(locationsL, c1);
+                c1.gridx++;
+                personPanel.add(locations, c1);
+                c1.gridy++; c1.gridx--;
+                personPanel.add(payL, c1);
+                c1.gridx++;
+                personPanel.add(pay, c1);
+                c1.gridy++; c1.gridx--;
+                personPanel.add(emailL, c1);
+                c1.gridx++;
+                personPanel.add(email, c1);
+
+                siftcards.add(personPanel);
+            }
+            cl.show(cards, "siftList");
+        });
+        siftListButton.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                siftListButton.setBackground(Color.BLACK);
+                siftListButton.setForeground(new Color(238, 192, 68));
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                siftListButton.setBackground(new Color(238, 192, 68));
+                siftListButton.setForeground(Color.BLACK);
+            }
+        });
+        next.addActionListener(e -> {
+            // Handle job seeker button click event
+            // Perform the necessary actions when the user indicates they are seeking a job
+            // For example, navigate to the job seeker section of your application
+            layout.next(siftcards);
+        });
+        next.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                next.setBackground(new Color(238, 192, 68));
+                next.setForeground(Color.BLACK);
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+
+                next.setBackground(Color.BLACK);
+                next.setForeground(new Color(238, 192, 68));
+            }
+        });
+        prev.addActionListener(e -> {
+            // Handle job seeker button click event
+            // Perform the necessary actions when the user indicates they are seeking a job
+            // For example, navigate to the job seeker section of your application
+            layout.previous(siftcards);
+        });
+        prev.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                prev.setBackground(new Color(238, 192, 68));
+                prev.setForeground(Color.BLACK);
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                prev.setBackground(Color.BLACK);
+                prev.setForeground(new Color(238, 192, 68));
+            }
+        });
+        backButton4.addActionListener(e -> {
+            // Handle job seeker button click event
+            // Perform the necessary actions when the user indicates they are seeking a job
+            // For example, navigate to the job seeker section of your application
+            cardLayout.show(cards, "buttons");
+        });
+        backButton4.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                backButton.setBackground(new Color(238, 192, 68));
+                backButton.setForeground(Color.BLACK);
+            }
+            @Override
+            public void focusLost(FocusEvent e) {
+                backButton.setBackground(Color.BLACK);
+                backButton.setForeground(new Color(238, 192, 68));
+            }
+        });
         mainPanel.add(headerPanel, BorderLayout.NORTH);
         c.gridy = 0;
         c.gridx = 0;
         c.gridwidth = 1;
         c.weightx = 0.5;
+        c.insets = new Insets(20, 0, 40, 0);
         buttonPanel.add(createJobButton, c);
-        c.gridx = 1;
-        c.gridwidth = 1;
+        c.gridy = 1;
         buttonPanel.add(viewJobsButton,c);
-        c.gridx = 2;
-        c.gridwidth = 1;
+        c.gridy = 2;
         buttonPanel.add(viewBusinessButton,c);
+        c.gridy = 3;
+        buttonPanel.add(siftListButton,c);
 
         mainPanel.add(cards, BorderLayout.CENTER);
 
         setContentPane(mainPanel);
 
         setVisible(true);
+    }
+
+    public static void main(String[] args){
+        MongoDBConnection connection = new MongoDBConnection("mongodb://localhost:27017", "JobSiftDB");
+        MainBusinessUI mainbusinessUI = new MainBusinessUI("123", connection);
     }
 }
