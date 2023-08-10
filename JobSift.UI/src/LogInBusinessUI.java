@@ -68,6 +68,7 @@ public class LogInBusinessUI extends JFrame{
 
         // Create the password label and field
         JLabel passwordLabel = new JLabel("Password:");
+        passwordLabel.setForeground(Color.BLACK);
         JTextField passwordField = new JPasswordField();
         loginPanel.add(passwordLabel);
         loginPanel.add(passwordField);

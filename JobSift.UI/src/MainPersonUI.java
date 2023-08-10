@@ -697,7 +697,11 @@ public class MainPersonUI extends JFrame {
             siftListL = (List<Object>) applicant.get("siftList");
         }
 
-        this.siftList = new HashSet<>(siftListL);
+        if(Objects.isNull(siftListL)){
+            this.siftList = new HashSet<>();
+        }else{
+            this.siftList = new HashSet<>(siftListL);
+        }
 
         cursor.close();
     }

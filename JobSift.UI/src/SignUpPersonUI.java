@@ -165,7 +165,7 @@ public class SignUpPersonUI extends JFrame {
                     connection.registerApplicant(name, password, email, skillsarr, locationsarr, Double.valueOf(salary), resume);
 
                     // Display a confirmation message
-                    JOptionPane.showMessageDialog(null, "Sign up successful!");
+//                    JOptionPane.showMessageDialog(null, "Sign up successful!");
 
                     dispose();
                     MainPersonUI mainPersonUI = new MainPersonUI(name, connection);

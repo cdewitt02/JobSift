@@ -269,7 +269,7 @@ public class MainBusinessUI extends JFrame {
         tutorialPanel.setPreferredSize(new Dimension(450, 50));
         tutorialPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
 
-        JLabel tutorialLabel1 = new JLabel("Each Panel contains info organized as Name, Company, Pay. Use the checkbox to add a job to your SiftList.");
+        JLabel tutorialLabel1 = new JLabel("Each Panel contains info organized as Name, Skills, Requested Pay. Use the checkbox to add a person to your SiftList.");
 
         tutorialLabel1.setForeground(Color.BLACK);
         tutorialPanel.add(tutorialLabel1, BorderLayout.NORTH);
