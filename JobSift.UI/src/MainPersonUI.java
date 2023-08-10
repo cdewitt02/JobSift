@@ -13,9 +13,6 @@ import java.awt.font.TextAttribute;
 import java.io.File;
 import java.util.List;
 import java.util.*;
-import java.awt.datatransfer.StringSelection;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -29,12 +26,13 @@ public class MainPersonUI extends JFrame {
     private String resumePath;
     private final MongoDBConnection connection;
 
-    private List<Object> allChecked = new ArrayList<>();
-    private Set<Object> siftList = new HashSet<>();
+    private Set<Object> allChecked = new HashSet<>();
+    private Set<Object> siftList;
 
     public MainPersonUI(String name, MongoDBConnection connection) {
         this.connection = connection;
         this.name = name;
+
         updateInfo();
 
         setTitle("Main Person UI");
@@ -60,8 +58,8 @@ public class MainPersonUI extends JFrame {
 
 
         // Create the label for the header
-        ImageIcon icon = new ImageIcon("C:\\Users\\charl\\Documents\\GitHub\\JobSift\\resources\\JobSift_logoSmall.png"); // Replace with the path to your left image file
-        setIconImage(new ImageIcon("C:\\Users\\charl\\Documents\\GitHub\\JobSift\\resources\\JobSift_logo.png").getImage());
+        ImageIcon icon = new ImageIcon("resources\\JobSift_logoSmall.png");
+        setIconImage(new ImageIcon("resources\\JobSift_logo.png").getImage());
 
         JLabel leftImageLabel = new JLabel(icon);
         JLabel rightImageLabel = new JLabel(icon);
@@ -476,7 +474,6 @@ public class MainPersonUI extends JFrame {
                 Font headerFont = new Font("Roboto", Font.BOLD, 28).deriveFont(fontAttributes);
                 Font regular = new Font("Roboto", Font.PLAIN, 28);
 
-
                 jobTitleL.setFont(headerFont);
                 jobTitleL.setForeground(Color.BLACK);
                 jobTitle.setFont(regular);
@@ -646,7 +643,12 @@ public class MainPersonUI extends JFrame {
                 backButton2.setForeground(new Color(238, 192, 68));
             }
         });
-        addJobsToSiftList.addActionListener(e -> siftList.addAll(allChecked));
+        addJobsToSiftList.addActionListener(e -> {
+            Bson filter = eq("name", name);
+            siftList.addAll(allChecked);
+            Bson update = Updates.set("siftList", siftList);
+            connection.applicants.updateOne(filter, update);
+        });
         addJobsToSiftList.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -689,7 +691,7 @@ public class MainPersonUI extends JFrame {
         // Execute the query and get the cursor
         MongoCursor<Document> cursor = connection.applicants.find(doc).iterator();
         // Iterate over the results
-
+        List<Object> siftListL = new ArrayList<>();
         while (cursor.hasNext()) {
             Document applicant = cursor.next();
             // Read the desired fields from the business document
@@ -698,7 +700,11 @@ public class MainPersonUI extends JFrame {
             this.preferredLocations = (List<String>) applicant.get("locations");
             this.salary = (Double) applicant.get("salary");
             this.resumePath = applicant.getString("resume");
+            siftListL = (List<Object>) applicant.get("siftList");
         }
+
+        this.siftList = new HashSet<>(siftListL);
+
         cursor.close();
     }
 }

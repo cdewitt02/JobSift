@@ -80,12 +80,8 @@ public class MongoDBConnection {
     public byte[] getByteData(Object docID){
         Document filter = new Document("_id", docID);
         Document doc = applicants.find(filter).first();
+        assert doc != null;
         String resume = (String)doc.get("resume");
         return Base64.getDecoder().decode(resume);
-    }
-    public void closeConnection() {
-        if (mongoClient != null) {
-            mongoClient.close();
-        }
     }
 }

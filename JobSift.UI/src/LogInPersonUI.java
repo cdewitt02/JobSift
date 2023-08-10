@@ -4,8 +4,6 @@ import org.bson.Document;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
@@ -16,8 +14,8 @@ public class LogInPersonUI extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 200);
         setLocationRelativeTo(null);
-        setIconImage(new ImageIcon("C:\\Users\\charl\\Documents\\GitHub\\JobSift\\resources\\JobSift_logo.png").getImage());
-        ImageIcon icon = new ImageIcon("C:\\Users\\charl\\Documents\\GitHub\\JobSift\\resources\\JobSift_logoSmall.png"); // Replace with the path to your left image file
+        setIconImage(new ImageIcon("resources\\JobSift_logo.png").getImage());
+        ImageIcon icon = new ImageIcon("resources\\JobSift_logoSmall.png"); // Replace with the path to your left image file
 
         //Title
 
@@ -81,35 +79,32 @@ public class LogInPersonUI extends JFrame{
         loginButton.setBackground(new Color(238, 192, 68));
         loginButton.setForeground(Color.BLACK);
         loginButton.setBorder(new LineBorder(Color.BLACK, 2));
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Perform the necessary actions for login
-                String name = usernameField.getText();
-                String password = passwordField.getText();
-                String passwordenc = null;
-                // Check the credentials and perform login logic
-                try {
-                    Document doc = connection.applicants.find(new Document("name", name)).first();
+        loginButton.addActionListener(e -> {
+            // Perform the necessary actions for login
+            String name = usernameField.getText();
+            String password = passwordField.getText();
+            String passwordenc = null;
+            // Check the credentials and perform login logic
+            try {
+                Document doc = connection.applicants.find(new Document("name", name)).first();
 
-                    // Execute the query and get the cursor
-                    MongoCursor<Document> cursor = connection.applicants.find(doc).iterator();
-                    while (cursor.hasNext()) {
-                        Document business = cursor.next();
-                        passwordenc = business.getString("password");
-                    }
-
-                    cursor.close();
-
-                    if (PasswordEncryption.checkPassword(password, passwordenc)) {
-                        dispose();
-                        MainPersonUI mainPersonUI = new MainPersonUI(name, connection);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Password incorrect");
-                    }
-                }catch (Exception g){
-                    JOptionPane.showMessageDialog(null, "Name not registered");
+                // Execute the query and get the cursor
+                MongoCursor<Document> cursor = connection.applicants.find(doc).iterator();
+                while (cursor.hasNext()) {
+                    Document person = cursor.next();
+                    passwordenc = person.getString("password");
                 }
+
+                cursor.close();
+
+                if (PasswordEncryption.checkPassword(password, passwordenc)) {
+                    dispose();
+                    new MainPersonUI(name, connection);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Password incorrect");
+                }
+            }catch (Exception g){
+                JOptionPane.showMessageDialog(null, "Name not registered");
             }
         });
         loginButton.addFocusListener(new FocusListener() {
@@ -130,13 +125,9 @@ public class LogInPersonUI extends JFrame{
         signupButton.setBackground(new Color(238, 192, 68));
         signupButton.setForeground(Color.BLACK);
         signupButton.setBorder(new LineBorder(Color.BLACK, 2));
-        signupButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                SignUpPersonUI signUpPersonUI = new SignUpPersonUI(connection);
-            }
+        signupButton.addActionListener(e -> {
+            dispose();
+            new SignUpPersonUI(connection);
         });
         signupButton.addFocusListener(new FocusListener() {
             @Override

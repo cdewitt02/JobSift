@@ -18,7 +18,7 @@ public class SignUpBusinessUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(650, 550);
         setLocationRelativeTo(null);
-        setIconImage(new ImageIcon("C:\\Users\\charl\\Documents\\GitHub\\JobSift\\resources\\JobSift_logo.png").getImage());
+        setIconImage(new ImageIcon("resources\\JobSift_logo.png").getImage());
 
         // Create the main panel and layout
         JPanel mainPanel = new JPanel();
@@ -27,7 +27,7 @@ public class SignUpBusinessUI extends JFrame {
 
 
         //Title
-        ImageIcon icon = new ImageIcon("C:\\Users\\charl\\Documents\\GitHub\\JobSift\\resources\\JobSift_logoSmall.png"); // Replace with the path to your left image file
+        ImageIcon icon = new ImageIcon("resources\\JobSift_logoSmall.png"); // Replace with the path to your left image file
 
         JPanel titlePanel = new JPanel(new BorderLayout()){
             @Override

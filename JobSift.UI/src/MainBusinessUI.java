@@ -20,9 +20,15 @@ import static com.mongodb.client.model.Filters.eq;
 public class MainBusinessUI extends JFrame {
     private String email;
     private List<Object> allChecked = new ArrayList<>();
-    private Set<Object> siftList = new HashSet<>();
+    private Set<Object> siftList;
+    private final MongoDBConnection connection;
+    private final String name;
 
     public MainBusinessUI(String name, MongoDBConnection connection) {
+        this.connection = connection;
+        this.name = name;
+        updateInfo();
+
         setTitle("Main Business UI");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(750, 750);
@@ -45,8 +51,8 @@ public class MainBusinessUI extends JFrame {
         headerPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
 
         //label for header
-        ImageIcon icon = new ImageIcon("C:\\Users\\charl\\Documents\\GitHub\\JobSift\\resources\\JobSift_logoSmall.png"); // Replace with the path to your left image file
-        setIconImage(new ImageIcon("C:\\Users\\charl\\Documents\\GitHub\\JobSift\\resources\\JobSift_logo.png").getImage());
+        ImageIcon icon = new ImageIcon("resources\\JobSift_logoSmall.png");
+        setIconImage(new ImageIcon("resources\\JobSift_logo.png").getImage());
 
         JLabel leftImageLabel = new JLabel(icon);
         JLabel rightImageLabel = new JLabel(icon);
@@ -498,8 +504,6 @@ public class MainBusinessUI extends JFrame {
                     Updates.set("industry", industryField.getText())
             );
             connection.businesses.updateOne(filter, update);
-//            dispose();
-//            MainBusinessUI mainBusinessUI = new MainBusinessUI(name, connection);
             cardLayout.show(cards, "buttons");
         });
         submitButton2.addFocusListener(new FocusListener() {
@@ -535,7 +539,12 @@ public class MainBusinessUI extends JFrame {
             }
         });
 
-        addPeopleToSiftList.addActionListener(e -> siftList.addAll(allChecked));
+        addPeopleToSiftList.addActionListener(e -> {
+            Bson filter = eq("name", name);
+            siftList.addAll(allChecked);
+            Bson update = Updates.set("siftList", siftList);
+            connection.businesses.updateOne(filter, update);
+        });
         addPeopleToSiftList.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -729,5 +738,26 @@ public class MainBusinessUI extends JFrame {
 
         setVisible(true);
     }
+    private void updateInfo(){
+        Document doc = connection.businesses.find(new Document("name", name)).first();
 
+        // Execute the query and get the cursor
+        MongoCursor<Document> cursor = connection.businesses.find(doc).iterator();
+        // Iterate over the results
+        List<Object> siftListL = new ArrayList<>();
+        while (cursor.hasNext()) {
+            Document applicant = cursor.next();
+            // Read the desired fields from the business document
+            this.email = applicant.getString("email");
+            siftListL = (List<Object>) applicant.get("siftList");
+        }
+
+        if(Objects.isNull(siftListL)){
+            this.siftList = new HashSet<>();
+        }else{
+            this.siftList = new HashSet<>(siftListL);
+        }
+
+        cursor.close();
+    }
 }

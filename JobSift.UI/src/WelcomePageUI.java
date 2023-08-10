@@ -18,7 +18,7 @@ public class WelcomePageUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 300);
         setLocationRelativeTo(null);
-        setIconImage(new ImageIcon("C:\\Users\\charl\\Documents\\GitHub\\JobSift\\resources\\JobSift_logo.png").getImage());
+        setIconImage(new ImageIcon("resources\\JobSift_logo.png").getImage());
 
         // Create the main panel and layout
         JPanel mainPanel = new JPanel(){
@@ -31,7 +31,7 @@ public class WelcomePageUI extends JFrame {
         };
         mainPanel.setLayout(new BorderLayout());
 
-        ImageIcon icon = new ImageIcon("C:\\Users\\charl\\Documents\\GitHub\\JobSift\\resources\\JobSift_logoSmall.png"); // Replace with the path to your left image file
+        ImageIcon icon = new ImageIcon("resources\\JobSift_logoSmall.png"); // Replace with the path to your left image file
 
         // Create the welcome label
         JPanel titlePanel = new JPanel(new BorderLayout()){
