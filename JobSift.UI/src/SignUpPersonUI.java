@@ -95,14 +95,6 @@ public class SignUpPersonUI extends JFrame {
         inputsPanel.add(resumeLabel);
         inputsPanel.add(resumeButton);
 
-        // Create the resume label and button
-        JLabel jobSeekLabel = new JLabel("Job in Search of: ");
-        jobSeekLabel.setForeground(Color.BLACK);
-        jobSeekField = new JTextField();
-        jobSeekField.setForeground(Color.BLACK);
-        inputsPanel.add(jobSeekLabel);
-        inputsPanel.add(jobSeekField);
-
         // Create the skills label and field
         JLabel skillsLabel = new JLabel("Skills (Format: Skill1,Skill2 ... no spaces):");
         skillsField = new JTextField();
@@ -162,11 +154,10 @@ public class SignUpPersonUI extends JFrame {
                 String locations = locationsField.getText();
                 String[] locationsarr = locations.split(",");
                 String salary = salaryField.getText();
-                String jobSeek = jobSeekField.getText();
 
                 if(passwordc.equals(password) && !password.isEmpty()) {
                     //Call document creator
-                    connection.registerApplicant(name, password, email, jobSeek, skillsarr, locationsarr, Double.valueOf(salary), resume);
+                    connection.registerApplicant(name, password, email, skillsarr, locationsarr, Double.valueOf(salary), resume);
 
                     // Display a confirmation message
                     JOptionPane.showMessageDialog(null, "Sign up successful!");

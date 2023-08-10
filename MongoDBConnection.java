@@ -5,7 +5,6 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,7 +42,7 @@ public class MongoDBConnection {
 
         System.out.println("Business registered successfully.");
     }
-    public void registerApplicant(String name, String password, String email, String jobSeeking, String[] skills, String[] locations, Double salary, File resume) {
+    public void registerApplicant(String name, String password, String email, String[] skills, String[] locations, Double salary, File resume) {
 
         List<String> skills_list = Arrays.asList(skills);
         List<String> locations_list = Arrays.asList(locations);
@@ -54,7 +53,6 @@ public class MongoDBConnection {
         Document applicant = new Document("name", name)
                 .append("password", password)
                 .append("email", email)
-                .append("jobSeeking", jobSeeking)
                 .append("skills", skills_list)
                 .append("locations", locations_list)
                 .append("salary", salary)
