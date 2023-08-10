@@ -67,6 +67,7 @@ public class MainPersonUI extends JFrame {
         JLabel rightImageLabel = new JLabel(icon);
         JLabel headerLabel = new JLabel("JobSift");
         headerLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        headerLabel.setForeground(Color.BLACK);
         headerLabel.setHorizontalAlignment(JLabel.CENTER);
         headerPanel.add(leftImageLabel, BorderLayout.WEST);
         headerPanel.add(headerLabel, BorderLayout.CENTER);

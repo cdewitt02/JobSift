@@ -4,7 +4,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
-import java.io.File;
+import java.util.Base64;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class MongoDBConnection {
 
         System.out.println("Business registered successfully.");
     }
-    public void registerApplicant(String name, String password, String email, String[] skills, String[] locations, Double salary, File resume) {
+    public void registerApplicant(String name, String password, String email, String[] skills, String[] locations, Double salary, String resume) {
 
         List<String> skills_list = Arrays.asList(skills);
         List<String> locations_list = Arrays.asList(locations);
@@ -56,7 +56,7 @@ public class MongoDBConnection {
                 .append("skills", skills_list)
                 .append("locations", locations_list)
                 .append("salary", salary)
-                .append("resume", resume.getAbsolutePath());
+                .append("resume", resume);
 
 
         // Insert the document into the collection
@@ -76,6 +76,12 @@ public class MongoDBConnection {
                 .append("pay", salary)
                 .append("contactEmail", contactEmail);
         jobs.insertOne(job);
+    }
+    public byte[] getByteData(Object docID){
+        Document filter = new Document("_id", docID);
+        Document doc = applicants.find(filter).first();
+        String resume = (String)doc.get("resume");
+        return Base64.getDecoder().decode(resume);
     }
     public void closeConnection() {
         if (mongoClient != null) {

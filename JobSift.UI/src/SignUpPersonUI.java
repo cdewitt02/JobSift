@@ -5,6 +5,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Base64;
+
 
 public class SignUpPersonUI extends JFrame {
     private JTextField nameField;
@@ -15,7 +19,7 @@ public class SignUpPersonUI extends JFrame {
     private JTextField locationsField;
     private JTextField salaryField;
     private JTextField jobSeekField;
-    private File resume;
+    private String resume;
 
     public SignUpPersonUI(MongoDBConnection connection) {
         // Set up the JFrame
@@ -133,9 +137,10 @@ public class SignUpPersonUI extends JFrame {
                 int result = fileChooser.showOpenDialog(SignUpPersonUI.this);
                 if (result == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
-                    resume = selectedFile;
-                    // Process the selected resume file
-                    System.out.println("Selected Resume: " + selectedFile.getAbsolutePath());
+                    byte[] fileContent = readFileAsBytes(selectedFile.getAbsolutePath());
+                    // Encode the file content to Base64
+                    String encodedFileContent = Base64.getEncoder().encodeToString(fileContent);
+                    resume = encodedFileContent;
                 }
             }
         });
@@ -205,5 +210,19 @@ public class SignUpPersonUI extends JFrame {
 
         // Make the JFrame visible
         setVisible(true);
+    }
+    // Helper method to read a file's content into a byte array
+    private static byte[] readFileAsBytes(String filePath) {
+        try {
+            File file = new File(filePath);
+            FileInputStream fileInputStream = new FileInputStream(file);
+            byte[] fileContent = new byte[(int) file.length()];
+            fileInputStream.read(fileContent);
+            fileInputStream.close();
+            return fileContent;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

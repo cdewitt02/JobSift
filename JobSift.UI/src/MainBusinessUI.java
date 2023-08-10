@@ -10,6 +10,8 @@ import java.awt.*;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.font.TextAttribute;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.*;
 
@@ -50,6 +52,7 @@ public class MainBusinessUI extends JFrame {
         JLabel rightImageLabel = new JLabel(icon);
         JLabel headerLabel = new JLabel("Business Center");
         headerLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        headerLabel.setForeground(Color.BLACK);
         headerLabel.setHorizontalAlignment(JLabel.CENTER);
         headerPanel.add(leftImageLabel, BorderLayout.WEST);
         headerPanel.add(headerLabel, BorderLayout.CENTER);
@@ -76,11 +79,11 @@ public class MainBusinessUI extends JFrame {
         createJobButton.setBorder(buttonBorder);
         createJobButton.setPreferredSize(new Dimension(300, 50)); // Set the preferred size for the button
 
-        JButton viewJobsButton = new JButton("View Jobs");
-        viewJobsButton.setBackground(new Color(238, 192, 68));
-        viewJobsButton.setForeground(Color.BLACK);
-        viewJobsButton.setBorder(buttonBorder);
-        viewJobsButton.setPreferredSize(new Dimension(300, 50)); // Set the preferred size for the button
+        JButton viewPeopleButton = new JButton("View People");
+        viewPeopleButton.setBackground(new Color(238, 192, 68));
+        viewPeopleButton.setForeground(Color.BLACK);
+        viewPeopleButton.setBorder(buttonBorder);
+        viewPeopleButton.setPreferredSize(new Dimension(300, 50)); // Set the preferred size for the button
 
         JButton viewBusinessButton = new JButton("View Business");
         viewBusinessButton.setBackground(new Color(238, 192, 68));
@@ -379,24 +382,24 @@ public class MainBusinessUI extends JFrame {
                 createJobButton.setForeground(Color.BLACK);
             }
         });
-        viewJobsButton.addActionListener(e -> {
+        viewPeopleButton.addActionListener(e -> {
             // Handle job seeker button click event
             // Perform the necessary actions when the user indicates they are seeking a job
             // For example, navigate to the job seeker section of your application
             CardLayout cl = (CardLayout) (cards.getLayout());
             cl.show(cards, "viewPeople");
         });
-        viewJobsButton.addFocusListener(new FocusListener() {
+        viewPeopleButton.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent e) {
-                viewJobsButton.setBackground(Color.BLACK);
-                viewJobsButton.setForeground(new Color(238, 192, 68));
+                viewPeopleButton.setBackground(Color.BLACK);
+                viewPeopleButton.setForeground(new Color(238, 192, 68));
             }
 
             @Override
             public void focusLost(FocusEvent e) {
-                viewJobsButton.setBackground(new Color(238, 192, 68));
-                viewJobsButton.setForeground(Color.BLACK);
+                viewPeopleButton.setBackground(new Color(238, 192, 68));
+                viewPeopleButton.setForeground(Color.BLACK);
             }
         });
         viewBusinessButton.addActionListener(e -> {
@@ -566,20 +569,20 @@ public class MainBusinessUI extends JFrame {
 
                 JLabel emailL = new JLabel("Email:"); JLabel email = new JLabel(doc2.getString("email"));
 
-//                JLabel resumeL = new JLabel("Resume:"); JLabel resumeButton = new JLabel(doc2.getString("company"));
-
                 JLabel skillsL = new JLabel("Skills:"); JLabel skillsText = new JLabel(skills);
 
                 JLabel locationsL = new JLabel("Preferred Location(s):"); JLabel locations = new JLabel(locationsText);
 
-                JLabel payL = new JLabel("Expected Pay:"); JLabel pay = new JLabel(doc2.get("pay") + " $/hr");
+                JLabel payL = new JLabel("Expected Pay:"); JLabel pay = new JLabel(doc2.get("salary") + " $/hr");
 
+                JButton resumeDownload = new JButton("Download Resume");
+                resumeDownload.setBackground(Color.BLACK);
+                resumeDownload.setForeground(new Color(238, 192, 68));
 
                 Map<TextAttribute, Integer> fontAttributes = new HashMap<>();
                 fontAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
                 Font headerFont = new Font("Roboto", Font.BOLD, 28).deriveFont(fontAttributes);
                 Font regular = new Font("Roboto", Font.PLAIN, 28);
-
 
                 nameL.setFont(headerFont);
                 nameL.setForeground(Color.BLACK);
@@ -606,6 +609,10 @@ public class MainBusinessUI extends JFrame {
                 c1.gridx++;
                 personPanel.add(personName, c1);
                 c1.gridy++; c1.gridx--;
+                personPanel.add(skillsL, c1);
+                c1.gridx++;
+                personPanel.add(skillsText, c1);
+                c1.gridy++; c1.gridx--;
                 personPanel.add(locationsL, c1);
                 c1.gridx++;
                 personPanel.add(locations, c1);
@@ -617,6 +624,18 @@ public class MainBusinessUI extends JFrame {
                 personPanel.add(emailL, c1);
                 c1.gridx++;
                 personPanel.add(email, c1);
+                c1.gridy++;c1.gridx--;c1.gridwidth = 2;
+                personPanel.add(resumeDownload, c1);
+
+                resumeDownload.addActionListener(g -> {
+                    try {
+                        String userHome = System.getProperty("user.home");
+                        String downloadsPath = Paths.get(userHome, "Downloads", name + "_resume.pdf").toString();
+                        FileDownloadController.saveDecodedBytesToFile(connection.getByteData(person), downloadsPath);
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                });
 
                 siftcards.add(personPanel);
             }
@@ -698,7 +717,7 @@ public class MainBusinessUI extends JFrame {
         c.insets = new Insets(20, 0, 40, 0);
         buttonPanel.add(createJobButton, c);
         c.gridy = 1;
-        buttonPanel.add(viewJobsButton,c);
+        buttonPanel.add(viewPeopleButton,c);
         c.gridy = 2;
         buttonPanel.add(viewBusinessButton,c);
         c.gridy = 3;
@@ -710,4 +729,5 @@ public class MainBusinessUI extends JFrame {
 
         setVisible(true);
     }
+
 }
