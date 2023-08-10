@@ -135,10 +135,6 @@ public class MainPersonUI extends JFrame {
         JTextField salaryField = new JTextField(salarystr);
 
         JLabel resumeLabel = new JLabel("Resume:");
-        JLabel currResumeLabel = new JLabel("Current Resume:");
-        JLabel currresume = new JLabel(resumePath);
-        currresume.setForeground(Color.BLACK);
-        currResumeLabel.setForeground(Color.BLACK);
         JButton resumeButton = new JButton("Upload New Resume");
         resumeLabel.setForeground(Color.BLACK);
         resumeButton.setBackground(Color.BLACK);
@@ -156,8 +152,6 @@ public class MainPersonUI extends JFrame {
         viewProfileCard.add(salaryField);
         viewProfileCard.add(resumeLabel);
         viewProfileCard.add(resumeButton);
-        viewProfileCard.add(currResumeLabel);
-        viewProfileCard.add(currresume);
 
         JButton submitButton2 = new JButton("Submit Changes");
         submitButton2.setBackground(Color.BLACK);

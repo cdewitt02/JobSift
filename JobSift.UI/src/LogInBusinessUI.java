@@ -16,7 +16,6 @@ public class LogInBusinessUI extends JFrame{
         setLocationRelativeTo(null);
         setIconImage(new ImageIcon("resources\\JobSift_logo.png").getImage());
 
-
         // Create the main panel and layout
         JPanel mainPanel = new JPanel() {
             @Override
