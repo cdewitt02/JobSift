@@ -157,7 +157,5 @@ public class WelcomePageUI extends JFrame {
     public static void main (String[] args){
         MongoDBConnection connection = new MongoDBConnection("mongodb://localhost:27017", "JobSiftDB");
         WelcomePageUI welcomePageUI = new WelcomePageUI(connection);
-
-
     }
 }

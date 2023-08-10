@@ -7,26 +7,20 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.font.TextAttribute;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 import static com.mongodb.client.model.Filters.eq;
 
 public class MainBusinessUI extends JFrame {
     private String email;
-    private String name;
-    private MongoDBConnection connection;
     private List<Object> allChecked = new ArrayList<>();
     private Set<Object> siftList = new HashSet<>();
 
     public MainBusinessUI(String name, MongoDBConnection connection) {
-        this.connection = connection;
-        this.name = name;
         setTitle("Main Business UI");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(750, 750);
@@ -289,16 +283,13 @@ public class MainBusinessUI extends JFrame {
             JCheckBox checkBox = new JCheckBox();
             checkBox.setBackground(new Color(238, 192, 68));
 
-            checkBox.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Handle check mark button click event
-                    // Perform the necessary actions when the button is clicked
-                    if(checkBox.isSelected()) {
-                        allChecked.add(person.get("_id"));
-                    }else{
-                        allChecked.remove(person.get("_id"));
-                    }
+            checkBox.addActionListener(e -> {
+                // Handle check mark button click event
+                // Perform the necessary actions when the button is clicked
+                if(checkBox.isSelected()) {
+                    allChecked.add(person.get("_id"));
+                }else{
+                    allChecked.remove(person.get("_id"));
                 }
             });
 
@@ -368,15 +359,12 @@ public class MainBusinessUI extends JFrame {
         cards.add(siftMainPanel, "siftList");
 
         //Button Listeners
-        createJobButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle job seeker button click event
-                // Perform the necessary actions when the user indicates they are seeking a job
-                // For example, navigate to the job seeker section of your application
-                CardLayout cl = (CardLayout) (cards.getLayout());
-                cl.show(cards, "create");
-            }
+        createJobButton.addActionListener(e -> {
+            // Handle job seeker button click event
+            // Perform the necessary actions when the user indicates they are seeking a job
+            // For example, navigate to the job seeker section of your application
+            CardLayout cl = (CardLayout) (cards.getLayout());
+            cl.show(cards, "create");
         });
         createJobButton.addFocusListener(new FocusListener() {
             @Override
@@ -391,15 +379,12 @@ public class MainBusinessUI extends JFrame {
                 createJobButton.setForeground(Color.BLACK);
             }
         });
-        viewJobsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle job seeker button click event
-                // Perform the necessary actions when the user indicates they are seeking a job
-                // For example, navigate to the job seeker section of your application
-                CardLayout cl = (CardLayout) (cards.getLayout());
-                cl.show(cards, "viewPeople");
-            }
+        viewJobsButton.addActionListener(e -> {
+            // Handle job seeker button click event
+            // Perform the necessary actions when the user indicates they are seeking a job
+            // For example, navigate to the job seeker section of your application
+            CardLayout cl = (CardLayout) (cards.getLayout());
+            cl.show(cards, "viewPeople");
         });
         viewJobsButton.addFocusListener(new FocusListener() {
             @Override
@@ -414,15 +399,12 @@ public class MainBusinessUI extends JFrame {
                 viewJobsButton.setForeground(Color.BLACK);
             }
         });
-        viewBusinessButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle job seeker button click event
-                // Perform the necessary actions when the user indicates they are seeking a job
-                // For example, navigate to the job seeker section of your application
-                CardLayout cl = (CardLayout) (cards.getLayout());
-                cl.show(cards, "viewBusiness");
-            }
+        viewBusinessButton.addActionListener(e -> {
+            // Handle job seeker button click event
+            // Perform the necessary actions when the user indicates they are seeking a job
+            // For example, navigate to the job seeker section of your application
+            CardLayout cl = (CardLayout) (cards.getLayout());
+            cl.show(cards, "viewBusiness");
         });
         viewBusinessButton.addFocusListener(new FocusListener() {
             @Override
@@ -437,21 +419,17 @@ public class MainBusinessUI extends JFrame {
                 viewBusinessButton.setForeground(Color.BLACK);
             }
         });
-        submitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String company = name;
-                String jobTitle = jobTitleField.getText();
-                String jobDescription = jobDescriptionField.getText();
-                String skills = skillsField.getText();
-                String[] skillsarr = skills.split(",");
-                String locations = locationsField.getText();
-                String[] locationsarr = locations.split(",");
-                String salary = salaryField.getText();
+        submitButton.addActionListener(e -> {
+            String jobTitle = jobTitleField.getText();
+            String jobDescription = jobDescriptionField.getText();
+            String skills = skillsField.getText();
+            String[] skillsarr = skills.split(",");
+            String locations = locationsField.getText();
+            String[] locationsarr = locations.split(",");
+            String salary = salaryField.getText();
 
-                connection.registerJob(company, jobTitle, jobDescription, skillsarr, locationsarr, Double.valueOf(salary), email);
+            connection.registerJob(name, jobTitle, jobDescription, skillsarr, locationsarr, Double.parseDouble(salary), email);
 
-            }
         });
         submitButton.addFocusListener(new FocusListener() {
             @Override
@@ -467,14 +445,11 @@ public class MainBusinessUI extends JFrame {
             }
         });
 
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle job seeker button click event
-                // Perform the necessary actions when the user indicates they are seeking a job
-                // For example, navigate to the job seeker section of your application
-                cardLayout.previous(cards);
-            }
+        backButton.addActionListener(e -> {
+            // Handle job seeker button click event
+            // Perform the necessary actions when the user indicates they are seeking a job
+            // For example, navigate to the job seeker section of your application
+            cardLayout.previous(cards);
         });
         backButton.addFocusListener(new FocusListener() {
             @Override
@@ -489,14 +464,11 @@ public class MainBusinessUI extends JFrame {
                 backButton.setForeground(new Color(238, 192, 68));
             }
         });
-        backButton2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle job seeker button click event
-                // Perform the necessary actions when the user indicates they are seeking a job
-                // For example, navigate to the job seeker section of your application
-                cardLayout.show(cards, "buttons");
-            }
+        backButton2.addActionListener(e -> {
+            // Handle job seeker button click event
+            // Perform the necessary actions when the user indicates they are seeking a job
+            // For example, navigate to the job seeker section of your application
+            cardLayout.show(cards, "buttons");
         });
         backButton2.addFocusListener(new FocusListener() {
             @Override
@@ -512,22 +484,20 @@ public class MainBusinessUI extends JFrame {
                 backButton2.setForeground(new Color(238, 192, 68));
             }
         });
-        submitButton2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle job seeker button click event
-                // Perform the necessary actions when the user indicates they are seeking a job
-                // For example, navigate to the job seeker section of your application
-                Bson filter = eq("name", name);
-                Bson update = Updates.combine(
-                        Updates.set("name", nameField.getText()),
-                        Updates.set("email", emailField.getText()),
-                        Updates.set("industry", industryField.getText())
-                );
-                connection.businesses.updateOne(filter, update);
-                dispose();
-                MainBusinessUI mainBusinessUI = new MainBusinessUI(name, connection);
-            }
+        submitButton2.addActionListener(e -> {
+            // Handle job seeker button click event
+            // Perform the necessary actions when the user indicates they are seeking a job
+            // For example, navigate to the job seeker section of your application
+            Bson filter = eq("name", name);
+            Bson update = Updates.combine(
+                    Updates.set("name", nameField.getText()),
+                    Updates.set("email", emailField.getText()),
+                    Updates.set("industry", industryField.getText())
+            );
+            connection.businesses.updateOne(filter, update);
+//            dispose();
+//            MainBusinessUI mainBusinessUI = new MainBusinessUI(name, connection);
+            cardLayout.show(cards, "buttons");
         });
         submitButton2.addFocusListener(new FocusListener() {
             @Override
@@ -739,10 +709,5 @@ public class MainBusinessUI extends JFrame {
         setContentPane(mainPanel);
 
         setVisible(true);
-    }
-
-    public static void main(String[] args){
-        MongoDBConnection connection = new MongoDBConnection("mongodb://localhost:27017", "JobSiftDB");
-        MainBusinessUI mainbusinessUI = new MainBusinessUI("123", connection);
     }
 }

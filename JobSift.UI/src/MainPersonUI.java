@@ -13,6 +13,9 @@ import java.awt.font.TextAttribute;
 import java.io.File;
 import java.util.List;
 import java.util.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -73,7 +76,7 @@ public class MainPersonUI extends JFrame {
 
         Border buttonBorder = new LineBorder(Color.BLACK, 2);
 
-        JPanel buttonPanel = new JPanel(){
+        JPanel buttonPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -101,7 +104,7 @@ public class MainPersonUI extends JFrame {
         siftListButton.setForeground(Color.BLACK);
         siftListButton.setBorder(buttonBorder);
         siftListButton.setPreferredSize(new Dimension(300, 50)); // Set the preferred size for the button
-        
+
         //Create viewProfileCard
 
         JPanel viewProfileCard = new JPanel();
@@ -175,7 +178,7 @@ public class MainPersonUI extends JFrame {
         viewJobsMain.setLayout(new BorderLayout());
         viewJobsMain.setBackground(new Color(238, 192, 68));
 
-        JPanel viewJobsHeaderPanel = new JPanel(){
+        JPanel viewJobsHeaderPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -185,8 +188,10 @@ public class MainPersonUI extends JFrame {
         };
         viewJobsHeaderPanel.setLayout(new GridBagLayout());
         GridBagConstraints h = new GridBagConstraints();
-        h.gridy = 0; h.gridx = 0;h.insets = new Insets(5, 5, 5, 5);
-        
+        h.gridy = 0;
+        h.gridx = 0;
+        h.insets = new Insets(5, 5, 5, 5);
+
         JButton backButton3 = new JButton("Back to Main Menu");
         backButton3.setBackground(Color.BLACK);
         backButton3.setForeground(new Color(238, 192, 68));
@@ -202,7 +207,7 @@ public class MainPersonUI extends JFrame {
         List<Document> jobs = new ArrayList<>();
 
         MongoCursor<Document> cursor = connection.jobs.find().cursor();
-        while (cursor.hasNext()){
+        while (cursor.hasNext()) {
             jobs.add(cursor.next());
         }
         cursor.close();
@@ -234,7 +239,7 @@ public class MainPersonUI extends JFrame {
             jobPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
 
             // Create labels for job details
-            JLabel info = new JLabel(job.getString("jobTitle") + ", " + job.getString("company") + ", $" + job.get("pay") + "/hr" );
+            JLabel info = new JLabel(job.getString("jobTitle") + ", " + job.getString("company") + ", $" + job.get("pay") + "/hr");
             info.setForeground(Color.BLACK);
             // Create check mark button
             JCheckBox checkBox = new JCheckBox();
@@ -243,9 +248,9 @@ public class MainPersonUI extends JFrame {
             checkBox.addActionListener(e -> {
                 // Handle check mark button click event
                 // Perform the necessary actions when the button is clicked
-                if(checkBox.isSelected()) {
+                if (checkBox.isSelected()) {
                     allChecked.add(job.get("_id"));
-                }else{
+                } else {
                     allChecked.remove(job.get("_id"));
                 }
             });
@@ -279,7 +284,10 @@ public class MainPersonUI extends JFrame {
         JPanel siftbuttonPanel = new JPanel();
         siftbuttonPanel.setLayout(new GridBagLayout());
         GridBagConstraints b = new GridBagConstraints();
-        b.gridx = 0; b.gridy = 0; b.insets = new Insets(0,5,0,5); b.fill = GridBagConstraints.HORIZONTAL;
+        b.gridx = 0;
+        b.gridy = 0;
+        b.insets = new Insets(0, 5, 0, 5);
+        b.fill = GridBagConstraints.HORIZONTAL;
         siftbuttonPanel.setBackground(new Color(238, 192, 68));
         siftbuttonPanel.setPreferredSize(new Dimension(getWidth(), 75));
         siftbuttonPanel.setBorder(BorderFactory.createMatteBorder(2, 0, 0, 0, Color.BLACK));
@@ -287,17 +295,17 @@ public class MainPersonUI extends JFrame {
         JButton next = new JButton("Next");
         next.setBackground(Color.BLACK);
         next.setForeground(new Color(238, 192, 68));
-        next.setPreferredSize(new Dimension(100,50));
+        next.setPreferredSize(new Dimension(100, 50));
 
         JButton prev = new JButton("Previous");
         prev.setBackground(Color.BLACK);
         prev.setForeground(new Color(238, 192, 68));
-        prev.setPreferredSize(new Dimension(100,50));
+        prev.setPreferredSize(new Dimension(100, 50));
 
         JButton backButton = new JButton("Back to Main Menu");
         backButton.setBackground(Color.BLACK);
         backButton.setForeground(new Color(238, 192, 68));
-        backButton.setPreferredSize(new Dimension(150,50));
+        backButton.setPreferredSize(new Dimension(150, 50));
 
         siftbuttonPanel.add(prev, b);
         b.gridx++;
@@ -306,7 +314,7 @@ public class MainPersonUI extends JFrame {
         siftbuttonPanel.add(next, b);
 
         siftMainPanel.add(siftcards, BorderLayout.CENTER);
-        siftMainPanel.add(siftbuttonPanel,BorderLayout.SOUTH);
+        siftMainPanel.add(siftbuttonPanel, BorderLayout.SOUTH);
 
         cards.add(buttonPanel, "buttons");
         cards.add(viewJobsMain, "viewJobs");
@@ -327,6 +335,7 @@ public class MainPersonUI extends JFrame {
                 next.setBackground(new Color(238, 192, 68));
                 next.setForeground(Color.BLACK);
             }
+
             @Override
             public void focusLost(FocusEvent e) {
 
@@ -346,6 +355,7 @@ public class MainPersonUI extends JFrame {
                 prev.setBackground(new Color(238, 192, 68));
                 prev.setForeground(Color.BLACK);
             }
+
             @Override
             public void focusLost(FocusEvent e) {
                 prev.setBackground(Color.BLACK);
@@ -364,6 +374,7 @@ public class MainPersonUI extends JFrame {
                 backButton.setBackground(new Color(238, 192, 68));
                 backButton.setForeground(Color.BLACK);
             }
+
             @Override
             public void focusLost(FocusEvent e) {
                 backButton.setBackground(Color.BLACK);
@@ -426,29 +437,38 @@ public class MainPersonUI extends JFrame {
             // Perform the necessary actions when the user indicates they are seeking a job
             // For example, navigate to the job seeker section of your application
             CardLayout cl = (CardLayout) (cards.getLayout());
-            for(Object job : siftList){
+            for (Object job : siftList) {
                 JPanel jobPanel = new JPanel();
                 jobPanel.setBackground(new Color(238, 192, 68));
                 jobPanel.setLayout(new GridBagLayout());
                 GridBagConstraints c1 = new GridBagConstraints();
-                c1.gridx = 0; c1.gridy = 0; c1.fill = GridBagConstraints.HORIZONTAL;
+                c1.gridx = 0;
+                c1.gridy = 0;
+                c1.fill = GridBagConstraints.HORIZONTAL;
                 Document doc = connection.jobs.find(eq("_id", job)).first();
-                String skills = String.join(",",(List<String>)doc.get("requiredSkills"));
-                String locationsarr = String.join(",",(List<String>)doc.get("locations"));
+                String skills = String.join(",", (List<String>) doc.get("requiredSkills"));
+                String locationsarr = String.join(",", (List<String>) doc.get("locations"));
 
-                JLabel jobTitleL = new JLabel("Job Title:"); JLabel jobTitle = new JLabel(doc.getString("jobTitle"));
+                JLabel jobTitleL = new JLabel("Job Title:");
+                JLabel jobTitle = new JLabel(doc.getString("jobTitle"));
 
-                JLabel companyL = new JLabel("Company:"); JLabel company = new JLabel(doc.getString("company"));
+                JLabel companyL = new JLabel("Company:");
+                JLabel company = new JLabel(doc.getString("company"));
 
-                JLabel jobDescriptionL = new JLabel("Job Description:");JLabel jobDescription = new JLabel(doc.getString("jobDescription"));
+                JLabel jobDescriptionL = new JLabel("Job Description:");
+                JLabel jobDescription = new JLabel(doc.getString("jobDescription"));
 
-                JLabel requiredSkillsL = new JLabel("Skills required:"); JLabel requiredSkills = new JLabel(skills);
+                JLabel requiredSkillsL = new JLabel("Skills required:");
+                JLabel requiredSkills = new JLabel(skills);
 
-                JLabel locationsL = new JLabel("Location(s):"); JLabel locations = new JLabel(locationsarr);
+                JLabel locationsL = new JLabel("Location(s):");
+                JLabel locations = new JLabel(locationsarr);
 
-                JLabel payL = new JLabel("Pay:"); JLabel pay = new JLabel(doc.get("pay") + " $/hr");
+                JLabel payL = new JLabel("Pay:");
+                JLabel pay = new JLabel(doc.get("pay") + " $/hr");
 
-                JLabel emailL = new JLabel("Contact Email:"); JLabel email = new JLabel(doc.getString("contactEmail"));
+                JLabel emailL = new JLabel("Contact Email:");
+                JLabel email = new JLabel(doc.getString("contactEmail"));
 
                 Map<TextAttribute, Integer> fontAttributes = new HashMap<>();
                 fontAttributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
@@ -488,27 +508,33 @@ public class MainPersonUI extends JFrame {
                 jobPanel.add(jobTitleL, c1);
                 c1.gridx++;
                 jobPanel.add(jobTitle, c1);
-                c1.gridy++; c1.gridx--;
+                c1.gridy++;
+                c1.gridx--;
                 jobPanel.add(companyL, c1);
                 c1.gridx++;
                 jobPanel.add(company, c1);
-                c1.gridy++; c1.gridx--;
+                c1.gridy++;
+                c1.gridx--;
                 jobPanel.add(jobDescriptionL, c1);
                 c1.gridx++;
                 jobPanel.add(jobDescription, c1);
-                c1.gridy++; c1.gridx--;
+                c1.gridy++;
+                c1.gridx--;
                 jobPanel.add(requiredSkillsL, c1);
                 c1.gridx++;
                 jobPanel.add(requiredSkills, c1);
-                c1.gridy++; c1.gridx--;
+                c1.gridy++;
+                c1.gridx--;
                 jobPanel.add(locationsL, c1);
                 c1.gridx++;
                 jobPanel.add(locations, c1);
-                c1.gridy++; c1.gridx--;
+                c1.gridy++;
+                c1.gridx--;
                 jobPanel.add(payL, c1);
                 c1.gridx++;
                 jobPanel.add(pay, c1);
-                c1.gridy++; c1.gridx--;
+                c1.gridy++;
+                c1.gridx--;
                 jobPanel.add(emailL, c1);
                 c1.gridx++;
                 jobPanel.add(email, c1);
@@ -543,6 +569,7 @@ public class MainPersonUI extends JFrame {
                 backButton2.setBackground(new Color(238, 192, 68));
                 backButton2.setForeground(Color.BLACK);
             }
+
             @Override
             public void focusLost(FocusEvent e) {
 
@@ -563,7 +590,7 @@ public class MainPersonUI extends JFrame {
             List<String> locations_list = Arrays.asList(locationsarr);
 
             Bson update;
-            if(!Objects.isNull(resume)){
+            if (!Objects.isNull(resume)) {
                 update = Updates.combine(
                         Updates.set("name", nameField.getText()),
                         Updates.set("email", emailField.getText()),
@@ -572,7 +599,7 @@ public class MainPersonUI extends JFrame {
                         Updates.set("resume", resume.getAbsolutePath()),
                         Updates.set("salary", finalSalary)
                 );
-            }else{
+            } else {
                 update = Updates.combine(
                         Updates.set("name", nameField.getText()),
                         Updates.set("email", emailField.getText()),
@@ -610,6 +637,7 @@ public class MainPersonUI extends JFrame {
                 backButton2.setBackground(new Color(238, 192, 68));
                 backButton2.setForeground(Color.BLACK);
             }
+
             @Override
             public void focusLost(FocusEvent e) {
 
@@ -624,6 +652,7 @@ public class MainPersonUI extends JFrame {
                 backButton2.setBackground(new Color(238, 192, 68));
                 backButton2.setForeground(Color.BLACK);
             }
+
             @Override
             public void focusLost(FocusEvent e) {
 
@@ -641,10 +670,10 @@ public class MainPersonUI extends JFrame {
         buttonPanel.add(viewProfileButton, c);
         c.gridy = 2;
         c.gridwidth = 1;
-        buttonPanel.add(viewJobsButton,c);
+        buttonPanel.add(viewJobsButton, c);
         c.gridy = 4;
         c.gridwidth = 1;
-        buttonPanel.add(siftListButton,c);
+        buttonPanel.add(siftListButton, c);
 
         mainPanel.add(cards, BorderLayout.CENTER);
 
@@ -652,7 +681,8 @@ public class MainPersonUI extends JFrame {
 
         setVisible(true);
     }
-    private void updateInfo(){
+
+    private void updateInfo() {
         Document doc = connection.applicants.find(new Document("name", name)).first();
 
         // Execute the query and get the cursor
@@ -663,18 +693,11 @@ public class MainPersonUI extends JFrame {
             Document applicant = cursor.next();
             // Read the desired fields from the business document
             this.email = applicant.getString("email");
-            this.skills = (List<String>)applicant.get("skills");
-            this.preferredLocations = (List<String>)applicant.get("locations");
-            this.salary = (Double)applicant.get("salary");
+            this.skills = (List<String>) applicant.get("skills");
+            this.preferredLocations = (List<String>) applicant.get("locations");
+            this.salary = (Double) applicant.get("salary");
             this.resumePath = applicant.getString("resume");
         }
         cursor.close();
     }
-
-    public static void main(String[] args){
-        MongoDBConnection connection = new MongoDBConnection("mongodb://localhost:27017", "JobSiftDB");
-        MainPersonUI mainpersonUI = new MainPersonUI("123", connection);
-    }
 }
-
-

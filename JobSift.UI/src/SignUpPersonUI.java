@@ -45,6 +45,7 @@ public class SignUpPersonUI extends JFrame {
         JLabel rightImageLabel = new JLabel(icon);
         JLabel titleLabel = new JLabel("JobSift User Sign-Up");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        titleLabel.setForeground(Color.BLACK);
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
         titlePanel.add(leftImageLabel, BorderLayout.WEST);
         titlePanel.add(titleLabel, BorderLayout.CENTER);
