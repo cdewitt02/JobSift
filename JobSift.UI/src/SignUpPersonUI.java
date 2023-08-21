@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.io.File;
@@ -11,14 +9,13 @@ import java.util.Base64;
 
 
 public class SignUpPersonUI extends JFrame {
-    private JTextField nameField;
-    private JTextField passwordField;
-    private JTextField emailField;
-    private JButton resumeButton;
-    private JTextField skillsField;
-    private JTextField locationsField;
-    private JTextField salaryField;
-    private JTextField jobSeekField;
+    private final JTextField nameField;
+    private final JTextField passwordField;
+    private final JTextField emailField;
+    private final JButton resumeButton;
+    private final JTextField skillsField;
+    private final JTextField locationsField;
+    private final JTextField salaryField;
     private String resume;
 
     public SignUpPersonUI(MongoDBConnection connection) {
@@ -91,7 +88,7 @@ public class SignUpPersonUI extends JFrame {
         inputsPanel.add(emailField);
 
         // Create the resume label and button
-        JLabel resumeLabel = new JLabel("Resume:");
+        JLabel resumeLabel = new JLabel("Resume (only PDF supported):");
         resumeButton = new JButton("Upload Resume");
         resumeLabel.setForeground(Color.BLACK);
         resumeButton.setBackground(Color.BLACK);
@@ -128,50 +125,43 @@ public class SignUpPersonUI extends JFrame {
         inputsPanel.add(submitButton);
 
         // Add action listener to the resume button
-        resumeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle resume button click event
-                // Implement the logic to upload a resume file
-                JFileChooser fileChooser = new JFileChooser();
-                int result = fileChooser.showOpenDialog(SignUpPersonUI.this);
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    byte[] fileContent = readFileAsBytes(selectedFile.getAbsolutePath());
-                    // Encode the file content to Base64
-                    String encodedFileContent = Base64.getEncoder().encodeToString(fileContent);
-                    resume = encodedFileContent;
-                }
+        resumeButton.addActionListener(e -> {
+            // Handle resume button click event
+            // Implement the logic to upload a resume file
+            JFileChooser fileChooser = new JFileChooser();
+            int result = fileChooser.showOpenDialog(SignUpPersonUI.this);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                byte[] fileContent = readFileAsBytes(selectedFile.getAbsolutePath());
+                // Encode the file content to Base64
+                resume = Base64.getEncoder().encodeToString(fileContent);
             }
         });
         // Add action listener to the submit button
-        submitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        submitButton.addActionListener(e -> {
 
-                // Handle submit button click event
-                String name = nameField.getText();
-                String password = passwordField.getText();
-                String passwordc = passwordcField.getText();
-                String email = emailField.getText();
-                String skills = skillsField.getText();
-                String[] skillsarr = skills.split(",");
-                String locations = locationsField.getText();
-                String[] locationsarr = locations.split(",");
-                String salary = salaryField.getText();
+            // Handle submit button click event
+            String name = nameField.getText();
+            String password = passwordField.getText();
+            String passwordc = passwordcField.getText();
+            String email = emailField.getText();
+            String skills = skillsField.getText();
+            String[] skillsarr = skills.split(",");
+            String locations = locationsField.getText();
+            String[] locationsarr = locations.split(",");
+            String salary = salaryField.getText();
 
-                if(passwordc.equals(password) && !password.isEmpty()) {
-                    //Call document creator
-                    connection.registerApplicant(name, password, email, skillsarr, locationsarr, Double.valueOf(salary), resume);
+            if(passwordc.equals(password) && !password.isEmpty()) {
+                //Call document creator
+                connection.registerApplicant(name, password, email, skillsarr, locationsarr, Double.valueOf(salary), resume);
 
-                    // Display a confirmation message
-//                    JOptionPane.showMessageDialog(null, "Sign up successful!");
+                // Display a confirmation message
+                JOptionPane.showMessageDialog(null, "Sign up successful!");
 
-                    dispose();
-                    MainPersonUI mainPersonUI = new MainPersonUI(name, connection);
-                }else{
-                    JOptionPane.showMessageDialog(null, "Passwords don't match or are empty");
-                }
+                dispose();
+                new MainPersonUI(name, connection);
+            }else{
+                JOptionPane.showMessageDialog(null, "Passwords don't match or are empty");
             }
         });
         submitButton.addFocusListener(new FocusListener() {

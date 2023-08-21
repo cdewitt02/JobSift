@@ -26,7 +26,7 @@ public class MainPersonUI extends JFrame {
     private String resumePath;
     private final MongoDBConnection connection;
 
-    private Set<Object> allChecked = new HashSet<>();
+    private final Set<Object> allChecked = new HashSet<>();
     private Set<Object> siftList;
 
     public MainPersonUI(String name, MongoDBConnection connection) {
@@ -35,7 +35,7 @@ public class MainPersonUI extends JFrame {
 
         updateInfo();
 
-        setTitle("Main Person UI");
+        setTitle("JobSift Person");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(750, 750);
         setLocationRelativeTo(null);
@@ -134,7 +134,7 @@ public class MainPersonUI extends JFrame {
         salaryLabel.setForeground(Color.BLACK);
         JTextField salaryField = new JTextField(salarystr);
 
-        JLabel resumeLabel = new JLabel("Resume:");
+        JLabel resumeLabel = new JLabel("Resume (PDF only):");
         JButton resumeButton = new JButton("Upload New Resume");
         resumeLabel.setForeground(Color.BLACK);
         resumeButton.setBackground(Color.BLACK);

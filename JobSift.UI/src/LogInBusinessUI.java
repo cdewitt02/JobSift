@@ -10,7 +10,7 @@ import java.awt.event.FocusListener;
 public class LogInBusinessUI extends JFrame{
     public LogInBusinessUI(MongoDBConnection connection){
         // Set up the JFrame
-        setTitle("User Login");
+        setTitle("Business Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(400, 200);
         setLocationRelativeTo(null);

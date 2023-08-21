@@ -1,16 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 public class SignUpBusinessUI extends JFrame {
-    private JTextField nameField;
-    private JTextField emailField;
-    private JTextField passwordField;
-    private JTextField passwordcField;
-    private JTextField industryField;
+    private final JTextField nameField;
+    private final JTextField emailField;
+    private final JTextField passwordField;
+    private final JTextField passwordcField;
+    private final JTextField industryField;
 
     public SignUpBusinessUI(MongoDBConnection connection) {
         // Set up the JFrame
@@ -96,25 +94,22 @@ public class SignUpBusinessUI extends JFrame {
         inputsPanel.add(submitButton);
 
         // Add action listener to the submit button
-        submitButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle submit button click event
-                // Retrieve and process the user's sign-up
-                String name = nameField.getText();
-                String email = emailField.getText();
-                String industry = industryField.getText();
-                String password = passwordField.getText();
-                String passwordc = passwordcField.getText();
-                if(passwordc.equals(password) && !password.isEmpty()) {
-                    //Call document creator
-                    connection.registerBusiness(name, email, industry, password);
+        submitButton.addActionListener(e -> {
+            // Handle submit button click event
+            // Retrieve and process the user's sign-up
+            String name = nameField.getText();
+            String email = emailField.getText();
+            String industry = industryField.getText();
+            String password = passwordField.getText();
+            String passwordc = passwordcField.getText();
+            if(passwordc.equals(password) && !password.isEmpty()) {
+                //Call document creator
+                connection.registerBusiness(name, email, industry, password);
 
-                    dispose();
-                    MainBusinessUI mainBusinessUI = new MainBusinessUI(name, connection);
-                }else{
-                    JOptionPane.showMessageDialog(null, "Passwords Don't Match or is empty");
-                }
+                dispose();
+                new MainBusinessUI(name, connection);
+            }else{
+                JOptionPane.showMessageDialog(null, "Passwords Don't Match or is empty");
             }
         });
         submitButton.addFocusListener(new FocusListener() {

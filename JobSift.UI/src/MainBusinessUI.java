@@ -19,7 +19,7 @@ import static com.mongodb.client.model.Filters.eq;
 
 public class MainBusinessUI extends JFrame {
     private String email;
-    private List<Object> allChecked = new ArrayList<>();
+    private final List<Object> allChecked = new ArrayList<>();
     private Set<Object> siftList;
     private final MongoDBConnection connection;
     private final String name;
@@ -29,7 +29,7 @@ public class MainBusinessUI extends JFrame {
         this.name = name;
         updateInfo();
 
-        setTitle("Main Business UI");
+        setTitle("JobSift Business");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(750, 750);
         setLocationRelativeTo(null);
@@ -436,6 +436,12 @@ public class MainBusinessUI extends JFrame {
             String locations = locationsField.getText();
             String[] locationsarr = locations.split(",");
             String salary = salaryField.getText();
+
+            jobTitleField.setText("");
+            jobDescriptionField.setText("");
+            skillsField.setText("");
+            locationsField.setText("");
+            salaryField.setText("");
 
             connection.registerJob(name, jobTitle, jobDescription, skillsarr, locationsarr, Double.parseDouble(salary), email);
 

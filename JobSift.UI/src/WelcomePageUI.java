@@ -1,20 +1,15 @@
-import javax.print.Doc;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 public class WelcomePageUI extends JFrame {
-    private JButton jobSeekerButton;
-    private JButton businessButton;
 
     public WelcomePageUI(MongoDBConnection connection) {
         // Set up the JFrame
-        setTitle("Welcome to Job Portal");
+        setTitle("Welcome to Job Sift");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 300);
         setLocationRelativeTo(null);
@@ -44,7 +39,7 @@ public class WelcomePageUI extends JFrame {
         };
         JLabel leftImageLabel = new JLabel(icon);
         JLabel rightImageLabel = new JLabel(icon);
-        JLabel titleLabel = new JLabel("Welcome to Job Portal!");
+        JLabel titleLabel = new JLabel("Welcome to Job Sift!");
         titleLabel.setForeground(Color.BLACK);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Increase the font size to 24
         titleLabel.setHorizontalAlignment(JLabel.CENTER);
@@ -73,22 +68,19 @@ public class WelcomePageUI extends JFrame {
 
 
         // Create the job seeker button
-        jobSeekerButton = new JButton("I'm seeking a job");
+        JButton jobSeekerButton = new JButton("I'm seeking a job");
         jobSeekerButton.setBackground(new Color(238, 192, 68));
         jobSeekerButton.setForeground(Color.BLACK);
         jobSeekerButton.setBorder(buttonBorder);
         jobSeekerButton.setPreferredSize(new Dimension(150, 25)); // Set the preferred size for the button
 
 
-        jobSeekerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle job seeker button click event
-                // Perform the necessary actions when the user indicates they are seeking a job
-                // For example, navigate to the job seeker section of your application
-                dispose();
-                LogInPersonUI logInPersonUI = new LogInPersonUI(connection);
-            }
+        jobSeekerButton.addActionListener(e -> {
+            // Handle job seeker button click event
+            // Perform the necessary actions when the user indicates they are seeking a job
+            // For example, navigate to the job seeker section of your application
+            dispose();
+            new LogInPersonUI(connection);
         });
         jobSeekerButton.addFocusListener(new FocusListener() {
             @Override
@@ -107,22 +99,19 @@ public class WelcomePageUI extends JFrame {
         });
 
         // Create the business button
-        businessButton = new JButton("I'm looking to fill a role");
+        JButton businessButton = new JButton("I'm looking to fill a role");
         businessButton.setBackground(new Color(238, 192, 68));
         businessButton.setForeground(Color.BLACK);
         businessButton.setBorder(buttonBorder);
         businessButton.setPreferredSize(new Dimension(150, 25)); // Set the preferred size for the button
 
 
-        businessButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Handle business button click event
-                // Perform the necessary actions when the user indicates they are looking to fill a role
-                // For example, navigate to the business section of your application
-                dispose();
-                LogInBusinessUI logInBusinessUI = new LogInBusinessUI(connection);
-            }
+        businessButton.addActionListener(e -> {
+            // Handle business button click event
+            // Perform the necessary actions when the user indicates they are looking to fill a role
+            // For example, navigate to the business section of your application
+            dispose();
+            new LogInBusinessUI(connection);
         });
         businessButton.addFocusListener(new FocusListener() {
             @Override
@@ -156,7 +145,6 @@ public class WelcomePageUI extends JFrame {
 
     public static void main (String[] args){
         MongoDBConnection connection = new MongoDBConnection("mongodb+srv://JSuser:BVIdnPN736aU92do@jobsiftcluster.1evheis.mongodb.net/", "JobSiftDB");
-        FileDownloadController fileDownloadController = new FileDownloadController();
-        WelcomePageUI welcomePageUI = new WelcomePageUI(connection);
+        new WelcomePageUI(connection);
     }
 }
